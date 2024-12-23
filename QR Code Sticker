@@ -1,1 +1,2092 @@
 
+import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import logoone from "../../../assets/img/TSBSLN.png";
+import logosmall from "../../../assets/img/TATALogosmall.png";
+import MDButton from "components/MDButton";
+import MDInput from "components/MDInput";
+import ReactSelect from "components/Select/ReactSelect";
+import MDTypography from "components/MDTypography";
+import Grid from "@mui/material/Grid";
+import MDBox from "components/MDBox";
+import alertify from "alertifyjs";
+import { TabulatorFull as Tabulator } from "tabulator-tables";
+import "tabulator-tables/dist/css/tabulator_simple.min.css";
+
+import axiosAPI from "../../../axiosAPI";
+import serverDetails from "../../../variables/serverDetails";
+import Preloader from "components/Preloader/Preloader";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AlarmIcon from "@mui/icons-material/Alarm";
+import LibraryAdd from "@mui/icons-material/LibraryAdd";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
+import Barcode from "react-barcode";
+import ReactToPrint from "react-to-print";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import QRCode from "react-qr-code";
+import Paper from "@mui/material/Paper";
+import "../Modals/TSMCMOF004FGLABEL.css";
+
+export default function TSMCMOF004WIPLabelModal(props) {
+  const [open, setOpen] = React.useState(false);
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth, setMaxWidth] = React.useState("lg");
+  const [reqType, setReqType] = React.useState({
+    value: "S",
+    label: "STOCK TRANSFER",
+  });
+  const [initialLoad, setInitialLoad] = useState(false);
+  const [sourcePlantList, setSourcePlantList] = React.useState([]);
+
+  const [sourcePlant, setSourcePlant] = React.useState([]);
+  const [crTableData, setCRTableData] = useState([]);
+  const [crTable, setCRTable] = useState(null);
+  const reqTypeOptions = [
+    { value: "S", label: "STOCK TRANSFER" },
+    { value: "P", label: "PURCHASE" },
+  ];
+  const [loading, setLoading] = React.useState(false);
+  const [labelSize, setLabelSize] = useState("");
+  const [labelData, setLabelData] = useState([]);
+  const pageStyle = ` @page{ size: A4 landscape; }
+  @media print {
+html, body {                 
+ font-size:22px;
+ font-family:arial;
+}
+
+}
+   `;
+  const pageStyleSmall = ` @page{ size: A4 landscape; }
+    @media print {
+  html, body {
+   font-size:22px;
+   font-family:arial;
+   margin-top:0px;
+   margin-left:60px;
+  }
+
+  }
+     `;
+  //page load
+  // var arr = props.inputValues();
+
+  // useEffect(() => {
+  //   if (props.open) {
+  //     // async function fetchData() {
+  //     //   {
+  //     //     const response = await getAuthorization();
+  //     //     if (response) {
+  //     //       setInitialLoad(true);
+  //     //     }
+
+  //     //     var arr = props.inputValues();
+  //     //     console.log(arr);
+  //     //      setLabelSize(arr.TMM_LABEL_SIZE);
+  //     //   }
+  //     // }
+
+  //     // fetchData();
+  //   }
+  // }, [props.open]);
+
+  useEffect(() => {
+    if (props?.data?.length) {
+      // console.log("change= ", props?.data);
+      setLabelData(props?.data);
+    }
+  }, [props?.data?.length]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    //setOpen(false);
+    setLabelData([]);
+    props.close(false);
+  };
+
+  const getAuthorization = () =>
+    new Promise((resolve, reject) => {
+      var defaultOptions = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("tmm_accessToken"),
+        },
+      };
+      var url = serverDetails.baseURL + serverDetails.RefreshTokenAPI;
+      axiosAPI
+        .post(
+          url,
+          { refreshToken: localStorage.getItem("tmm_refreshToken") },
+          defaultOptions
+        )
+        .then((response) => {
+          if (response.statusText != "" && response.statusText != "OK") {
+            reject(response.statusText);
+          } else {
+            localStorage.setItem("tmm_accessToken", response.data.accessToken);
+            localStorage.setItem(
+              "tmm_refreshToken",
+              response.data.refreshToken
+            );
+            resolve(response.data);
+          }
+        });
+    });
+
+  const componentRef = React.useRef();
+
+  return (
+    <React.Fragment>
+      <Dialog
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        open={props.open}
+        onClose={handleClose}
+      >
+        <DialogContent>
+          {loading && <Preloader />}
+          <MDBox px={1} py={1}>
+            <br />
+            {labelData?.length &&
+              labelData.map(function (wipstickerLabelvalue) {
+                function chunkString(str, len) {
+                  const size = Math.ceil(str.length / len);
+                  const r = Array(size);
+                  let offset = 0;
+
+                  for (let i = 0; i < size; i++) {
+                    r[i] = str.substr(offset, len);
+                    offset += len;
+                  }
+
+                  return r;
+                }
+                if (serverDetails.Plant == "0742") {
+                  var arrroute = [];
+                  if (wipstickerLabelvalue.ROUTE != null) {
+                    if (wipstickerLabelvalue.ROUTE.length > 40) {
+                      arrroute = chunkString(wipstickerLabelvalue.ROUTE, 40);
+                      wipstickerLabelvalue.ROUTE =
+                        arrroute[0] +
+                        "<br/><br/><br/><br/><br/><br/>" +
+                        arrroute[1];
+                    }
+                  }
+                }
+
+                // var qrCodeValue =
+                //   wipstickerLabelvalue.BATCHNO +
+                //   "," +
+                //   wipstickerLabelvalue.MAT_DESC +
+                //   "," +
+                //   wipstickerLabelvalue.GRADE;
+                var qrCodeValue =
+                  wipstickerLabelvalue.BATCHNO +
+                  "," +
+                  wipstickerLabelvalue.PLN_CR_THICK +
+                  "," +
+                  wipstickerLabelvalue.PLN_CR_WIDTH +
+                  "," +
+                  wipstickerLabelvalue.WIPLENGTH;
+                // if (wipstickerLabelvalue.CUST != null) {
+                //   if (wipstickerLabelvalue.CUST.toLowerCase() == "free stock") {
+                //     wipstickerLabelvalue.MAT_DESC = "";
+                //   }
+                // }
+                if (
+                  wipstickerLabelvalue.PLANTCD == "0782" &&
+                  wipstickerLabelvalue.CUR_STAGE == "R-CR SLITTER"
+                ) {
+                  wipstickerLabelvalue.WIPWT = null;
+                }
+                // for coil or sheet type check
+                var coiltype = "MM";
+                if (
+                  wipstickerLabelvalue.COILORSHEETTYPE != null &&
+                  wipstickerLabelvalue.COILORSHEETTYPE == "S"
+                ) {
+                  coiltype = "MM";
+                }
+                if (
+                  wipstickerLabelvalue.COILORSHEETTYPE != null &&
+                  wipstickerLabelvalue.COILORSHEETTYPE == "C"
+                ) {
+                  coiltype = "M";
+                }
+                var Sticker0782Fur = "0";
+                if (
+                  wipstickerLabelvalue.PLANTCD == "0782" &&
+                  (wipstickerLabelvalue.CUR_STAGE == "H-H&T Furnace" ||
+                    wipstickerLabelvalue.CUR_STAGE == "KT-COLOR TEMPARING" ||
+                    wipstickerLabelvalue.CUR_STAGE == "N-GRINDING" ||
+                    wipstickerLabelvalue.CUR_STAGE == "E-ETL" ||
+                    wipstickerLabelvalue.CUR_STAGE == "IS-INSPECTION")
+                ) {
+                  Sticker0782Fur = "1";
+                }
+
+                return (
+                  <React.Fragment>
+                    {wipstickerLabelvalue?.TMM_LABEL_SIZE == "B1" && (
+                      <Grid
+                        item
+                        xs={12}
+                        ref={componentRef}
+                        id="print-report-0785"
+                      >
+                        <TableContainer component={Paper}>
+                          <Table
+                            aria-label="simple1 table1"
+                            style={{
+                              border: "1",
+                              minHeight: "600",
+                              color: "black",
+                            }}
+                          >
+                            <TableBody>
+                              <TableRow>
+                                <TableCell
+                                  colSpan={4}
+                                  align="center"
+                                  style={{
+                                    fontSize: "1.6rem",
+                                    fontWeight: "bold",
+                                    color: "black",
+                                  }}
+                                >
+                                  WIP Details
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Customer Name
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={3}
+                                >
+                                  {wipstickerLabelvalue.CUST}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Product Desc.
+                                </TableCell>
+                                <TableCell
+                                  colSpan={3}
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {serverDetails?.Plant === "0742" &&
+                                  (wipstickerLabelvalue.DIV_FLAG === "Y" ||
+                                    wipstickerLabelvalue.DIV_FLAG === "A")
+                                    ? wipstickerLabelvalue?.PRODMATDESC
+                                    : wipstickerLabelvalue.MAT_DESC}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Batch Number
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={
+                                    serverDetails?.Plant === "0742"
+                                      ? {
+                                          fontSize: "1.8rem",
+                                          fontWeight: "bold",
+                                        }
+                                      : {
+                                          fontSize: "1.2rem",
+                                          fontWeight: "bold",
+                                        }
+                                  }
+                                >
+                                  {wipstickerLabelvalue.BATCHNO}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Mother Batch
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.MOTHER_BATCH}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Thickness
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.PLN_CR_THICK !=
+                                    null && (
+                                    <text>
+                                      {wipstickerLabelvalue.PLN_CR_THICK.toFixed(
+                                        3
+                                      ) + " MM"}
+                                    </text>
+                                  )}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Customer Grade
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.GRADE}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Width
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.PLN_CR_WIDTH !=
+                                    null && (
+                                    <text>
+                                      {wipstickerLabelvalue.PLN_CR_WIDTH +
+                                        " MM"}
+                                    </text>
+                                  )}
+                                </TableCell>
+
+                                {!props?.weightVisible && (
+                                  <>
+                                    <TableCell
+                                      align="left"
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Weight
+                                    </TableCell>
+                                    <TableCell
+                                      align="left"
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {wipstickerLabelvalue.WIPWT != null && (
+                                        <text>
+                                          {wipstickerLabelvalue.WIPWT.toFixed(
+                                            3
+                                          ) + " MT"}
+                                        </text>
+                                      )}
+                                    </TableCell>
+                                  </>
+                                )}
+
+                                {props?.weightVisible && (
+                                  <>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                  </>
+                                )}
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Surface finish
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.MSURFACE}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Date/Shift
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.DATSHIFT}
+                                </TableCell>
+                              </TableRow>
+                              {/* //for testing */}
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontsize: "1.2rem",
+                                    fontweight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  <Table>
+                                    <TableBody>
+                                      <TableRow>
+                                        <TableCell
+                                          align="left"
+                                          style={{
+                                            fontSize: "1.2rem",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          Length
+                                        </TableCell>
+                                        <TableCell
+                                          align="left"
+                                          style={{
+                                            fontSize: "1.2rem",
+                                            fontWeight: "bold",
+                                          }}
+                                        >
+                                          {wipstickerLabelvalue.WIPLENGTH !=
+                                            null && (
+                                            <text>
+                                              {wipstickerLabelvalue.WIPLENGTH +
+                                                " MM"}
+                                            </text>
+                                          )}
+                                        </TableCell>
+                                      </TableRow>
+                                      <TableRow>
+                                        <TableCell align="left">
+                                          <Table>
+                                            <TableBody>
+                                              <TableRow>
+                                                <TableCell
+                                                  align="left"
+                                                  style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: "bold",
+                                                  }}
+                                                >
+                                                  No of sheet
+                                                </TableCell>
+
+                                                <TableCell
+                                                  align="left"
+                                                  style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: "bold",
+                                                  }}
+                                                >
+                                                  <text>
+                                                    {
+                                                      wipstickerLabelvalue.OUT_SHEETS
+                                                    }
+                                                  </text>
+                                                </TableCell>
+                                              </TableRow>
+                                              <TableRow>
+                                                <TableCell
+                                                  align="left"
+                                                  style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: "bold",
+                                                  }}
+                                                >
+                                                  Product Type
+                                                </TableCell>
+                                                <TableCell
+                                                  align="left"
+                                                  style={{
+                                                    fontSize: "1rem",
+                                                    fontWeight: "bold",
+                                                  }}
+                                                >
+                                                  {wipstickerLabelvalue.PRDTYPE}
+                                                </TableCell>
+                                              </TableRow>
+                                            </TableBody>
+                                          </Table>
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableBody>
+                                  </Table>
+                                </TableCell>
+
+                                <TableCell align="left">
+                                  <QRCode
+                                    value={qrCodeValue}
+                                    size={100}
+                                    style={{
+                                      width: "8rem",
+                                      height: "8rem",
+                                      margin: "auto",
+                                    }}
+                                  />
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  <img
+                                    src={logoone}
+                                    alt="logo"
+                                    style={{
+                                      width: "10rem",
+                                      height: "3rem",
+                                      margin: "auto",
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  Previous Stage Remarks
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  {serverDetails?.Plant == "0783"
+                                    ? wipstickerLabelvalue.PREMARKS
+                                    : ""}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  Process Route
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  {wipstickerLabelvalue.ROUTE}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Current Workcenter
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.CUR_STAGE}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Next Workcenter
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  {wipstickerLabelvalue.NXT_STAGE}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Top Coat Color
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.TOPCOATCOLOR}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Bottom Coat Color
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.BOTTOMCOATCOLOR}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    )}
+                    {wipstickerLabelvalue.TMM_LABEL_SIZE == "B" && (
+                      <Grid
+                        item
+                        xs={12}
+                        ref={componentRef}
+                        id="print-report-0785"
+                      >
+                        <TableContainer component={Paper}>
+                          <Table
+                            aria-label="simple1 table1"
+                            style={{
+                              border: "1",
+                              minHeight: "600",
+                              color: "black",
+                            }}
+                          >
+                            <TableBody>
+                              <TableRow>
+                                <TableCell
+                                  colSpan={4}
+                                  align="center"
+                                  style={{
+                                    fontSize: "1.6rem",
+                                    fontWeight: "bold",
+                                    color: "black",
+                                  }}
+                                >
+                                  WIP Details
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Customer Name
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={3}
+                                >
+                                  {wipstickerLabelvalue.CUST}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Product Desc.
+                                </TableCell>
+                                <TableCell
+                                  colSpan={3}
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {serverDetails?.Plant === "0742" &&
+                                  (wipstickerLabelvalue.DIV_FLAG === "Y" ||
+                                    wipstickerLabelvalue.DIV_FLAG === "A")
+                                    ? wipstickerLabelvalue?.PRODMATDESC
+                                    : wipstickerLabelvalue.MAT_DESC}
+                                  {/* {wipstickerLabelvalue.MAT_DESC} */}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Batch Number
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={
+                                    serverDetails?.Plant === "0742"
+                                      ? {
+                                          fontSize: "1.8rem",
+                                          fontWeight: "bold",
+                                        }
+                                      : {
+                                          fontSize: "1.2rem",
+                                          fontWeight: "bold",
+                                        }
+                                  }
+                                >
+                                  {wipstickerLabelvalue.BATCHNO}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Mother Batch
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.MOTHER_BATCH}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Thickness
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.PLN_CR_THICK !=
+                                    null && (
+                                    <text>
+                                      {wipstickerLabelvalue.PLN_CR_THICK.toFixed(
+                                        3
+                                      ) + " MM"}
+                                    </text>
+                                  )}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Customer Grade
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {serverDetails?.Plant == "0761"
+                                    ? wipstickerLabelvalue.STGRADE
+                                    : wipstickerLabelvalue.GRADE}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Width
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.PLN_CR_WIDTH !=
+                                    null && (
+                                    <text>
+                                      {wipstickerLabelvalue.PLN_CR_WIDTH +
+                                        " MM"}
+                                    </text>
+                                  )}
+                                </TableCell>
+
+                                {!props?.weightVisible && (
+                                  <>
+                                    <TableCell
+                                      align="left"
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Weight
+                                    </TableCell>
+                                    <TableCell
+                                      align="left"
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {wipstickerLabelvalue.WIPWT != null && (
+                                        <text>
+                                          {wipstickerLabelvalue.WIPWT.toFixed(
+                                            3
+                                          ) + " MT"}
+                                        </text>
+                                      )}
+                                    </TableCell>
+                                  </>
+                                )}
+
+                                {props?.weightVisible && (
+                                  <>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                  </>
+                                )}
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Surface finish
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.MSURFACE}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Date/Shift
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.DATSHIFT}
+                                </TableCell>
+                              </TableRow>
+                              {/* //for testing */}
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontsize: "1.2rem",
+                                    fontweight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  {wipstickerLabelvalue.PLANTCD !== "0738" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0742" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0743" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0744" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0760" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0761" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0762" &&
+                                    wipstickerLabelvalue.PLANTCD !== "0763" && (
+                                      <Table>
+                                        <TableBody>
+                                          <TableRow>
+                                            <TableCell
+                                              colSpan={2}
+                                              align="left"
+                                              style={{
+                                                fontSize: "1.2rem",
+                                                fontWeight: "bold",
+                                              }}
+                                            >
+                                              IEO(for GP)
+                                            </TableCell>
+                                          </TableRow>
+                                          <TableRow>
+                                            <TableCell align="left">
+                                              <Table>
+                                                <TableBody>
+                                                  <TableRow>
+                                                    <TableCell
+                                                      align="left"
+                                                      style={{
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                      }}
+                                                    >
+                                                      No of sheet
+                                                    </TableCell>
+
+                                                    <TableCell
+                                                      align="left"
+                                                      style={{
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                      }}
+                                                    >
+                                                      <text>
+                                                        {
+                                                          wipstickerLabelvalue.OUT_SHEETS
+                                                        }
+                                                      </text>
+                                                    </TableCell>
+                                                  </TableRow>
+                                                  <TableRow>
+                                                    <TableCell
+                                                      align="left"
+                                                      style={{
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                      }}
+                                                    >
+                                                      Product Type
+                                                    </TableCell>
+                                                    <TableCell
+                                                      align="left"
+                                                      style={{
+                                                        fontSize: "1rem",
+                                                        fontWeight: "bold",
+                                                      }}
+                                                    ></TableCell>
+                                                  </TableRow>
+                                                </TableBody>
+                                              </Table>
+                                            </TableCell>
+                                          </TableRow>
+                                        </TableBody>
+                                      </Table>
+                                    )}
+                                </TableCell>
+
+                                <TableCell align="left">
+                                  {(wipstickerLabelvalue.PLANTCD == "0742" ||
+                                    wipstickerLabelvalue.PLANTCD == "0743" ||
+                                    wipstickerLabelvalue.PLANTCD == "0744") && (
+                                    <QRCode
+                                      value={qrCodeValue}
+                                      size={140}
+                                      style={{
+                                        width: "10rem",
+                                        height: "10rem",
+                                        margin: "auto",
+                                      }}
+                                    />
+                                  )}
+                                  {(wipstickerLabelvalue.PLANTCD == "0782" ||
+                                    wipstickerLabelvalue.PLANTCD == "0783" ||
+                                    wipstickerLabelvalue.PLANTCD == "0784" ||
+                                    wipstickerLabelvalue.PLANTCD == "0785") && (
+                                    <QRCode
+                                      value={qrCodeValue}
+                                      size={100}
+                                      style={{
+                                        width: "8rem",
+                                        height: "8rem",
+                                        margin: "auto",
+                                      }}
+                                    />
+                                  )}
+                                  {(wipstickerLabelvalue.PLANTCD == "0760" ||
+                                    wipstickerLabelvalue.PLANTCD == "0761" ||
+                                    wipstickerLabelvalue.PLANTCD == "0762" ||
+                                    wipstickerLabelvalue.PLANTCD == "0763") && (
+                                    <QRCode
+                                      value={qrCodeValue}
+                                      size={100}
+                                      style={{
+                                        width: "8rem",
+                                        height: "8rem",
+                                        margin: "auto",
+                                      }}
+                                    />
+                                  )}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  <img
+                                    src={logoone}
+                                    alt="logo"
+                                    style={{
+                                      width: "10rem",
+                                      height: "3rem",
+                                      margin: "auto",
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  Previous Stage Remarks
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  {serverDetails?.Plant == "0783"
+                                    ? wipstickerLabelvalue.PREMARKS
+                                    : ""}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  Process Route
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                  colSpan={2}
+                                >
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html: wipstickerLabelvalue.ROUTE,
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Current Workcenter
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.CUR_STAGE}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Next Workcenter
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{ fontWeight: "bold" }}
+                                >
+                                  {wipstickerLabelvalue.NXT_STAGE}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Top Coat Color
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.TOPCOATCOLOR}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Bottom Coat Color
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.BOTTOMCOATCOLOR}
+                                </TableCell>
+                              </TableRow>
+                              {(wipstickerLabelvalue.PLANTCD == "0742" ||
+                                wipstickerLabelvalue.PLANTCD == "0743" ||
+                                wipstickerLabelvalue.PLANTCD == "0744") && (
+                                <TableRow>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontSize: "1.2rem",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    Quality Grade
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontSize: "1.2rem",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {wipstickerLabelvalue.QAGRADE}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontSize: "1.2rem",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    Act length
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontSize: "1.2rem",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {wipstickerLabelvalue.OUT_LENGTH !=
+                                      null && (
+                                      <text>
+                                        {parseInt(
+                                          wipstickerLabelvalue.OUT_LENGTH
+                                        ) +
+                                          " " +
+                                          coiltype}
+                                      </text>
+                                    )}
+                                  </TableCell>
+                                </TableRow>
+                              )}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    )}
+                    {wipstickerLabelvalue.TMM_LABEL_SIZE == "S" &&
+                      Sticker0782Fur == "0" && (
+                        <Grid
+                          item
+                          xs={12}
+                          ref={componentRef}
+                          //id="print-report-student-div-WIPAC"
+                          id="smallsticker"
+                        >
+                          <Table
+                            sx={{ minHeight: "120px" }}
+                            style={{ border: 1 }}
+                            cellspacing="0"
+                            cellpadding="0"
+                          >
+                            <TableBody>
+                              <TableRow>
+                                <TableCell
+                                  size="small"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  CUSTOMER NAME
+                                </TableCell>
+                                <TableCell
+                                  colSpan={3}
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.CUST}
+                                </TableCell>
+                                <TableCell
+                                  rowSpan={6}
+                                  align="left"
+                                  style={{ textAlign: "left" }}
+                                >
+                                  <QRCode
+                                    value={qrCodeValue}
+                                    size={100}
+                                    style={{
+                                      height: "6rem",
+                                      width: "8rem",
+                                      marginTop: "-10px",
+                                    }}
+                                  />
+
+                                  <img
+                                    src={logosmall}
+                                    alt="logo"
+                                    style={{
+                                      width: "6rem",
+                                      height: "3rem",
+                                      margin: "2px",
+                                      display: "block",
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  PRODUCT DESC.
+                                </TableCell>
+                                <TableCell
+                                  colSpan={3}
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {serverDetails?.Plant === "0742" &&
+                                  (wipstickerLabelvalue.DIV_FLAG === "Y" ||
+                                    wipstickerLabelvalue.DIV_FLAG === "A")
+                                    ? wipstickerLabelvalue?.PRODMATDESC
+                                    : wipstickerLabelvalue.MAT_DESC}
+                                  {/* {wipstickerLabelvalue.MAT_DESC} */}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  MOTHER BATCH
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.MOTHER_BATCH}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  CUSTOMER GRADE
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.GRADE}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  BATCH NO.
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={
+                                    serverDetails?.Plant === "0742"
+                                      ? {
+                                          fontSize: "1.8rem",
+                                          fontWeight: "bold",
+                                          textAlign: "left",
+                                        }
+                                      : {
+                                          fontSize: "1.2rem",
+                                          fontWeight: "bold",
+                                          textAlign: "left",
+                                        }
+                                  }
+                                >
+                                  {wipstickerLabelvalue.BATCHNO}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  DESTINATION PORT
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.PORTOFDEST}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                {!props?.weightVisible && (
+                                  <>
+                                    <TableCell
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                        textAlign: "left",
+                                      }}
+                                    >
+                                      WEIGHT
+                                    </TableCell>
+                                    <TableCell
+                                      align="left"
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                        textAlign: "left",
+                                      }}
+                                    >
+                                      {wipstickerLabelvalue.WIPWT != null && (
+                                        <text>
+                                          {wipstickerLabelvalue.WIPWT.toFixed(
+                                            3
+                                          ) + " MT"}
+                                        </text>
+                                      )}
+                                    </TableCell>
+                                  </>
+                                )}
+
+                                {props?.weightVisible && (
+                                  <>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                  </>
+                                )}
+
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  <label>
+                                    THICKNESS -
+                                    {wipstickerLabelvalue.PLN_CR_THICK !=
+                                      null && (
+                                      <text>
+                                        {wipstickerLabelvalue.PLN_CR_THICK.toFixed(
+                                          3
+                                        ) + " MM"}
+                                      </text>
+                                    )}
+                                  </label>
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  <label>
+                                    LENGTH
+                                    {wipstickerLabelvalue.WIPLENGTH != null && (
+                                      <text>
+                                        {wipstickerLabelvalue.WIPLENGTH + " MM"}
+                                      </text>
+                                    )}
+                                  </label>
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {/* Change by Guarav change only for khopoli -----start */}
+                                  {wipstickerLabelvalue.CUST_CODE ===
+                                    "0000190464" &&
+                                  serverDetails?.Plant == "0783" ? (
+                                    <text>PRODUCT CODE</text>
+                                  ) : (
+                                    <>
+                                      {/* Change by Guarav change only for khopoli -----end */}
+                                      {(wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                        "MNBAL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNETL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNGRM_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNHTF_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNPLM_01") && (
+                                        <text>Surface Finish</text>
+                                      )}
+                                      {(wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                        "MNBAL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNETL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNGRM_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNHTF_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNPLM_01") && (
+                                        <text>PACKING MODE</text>
+                                      )}
+                                    </>
+                                  )}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.CUST_CODE ===
+                                  "0000190464" ? (
+                                    <text>
+                                      {wipstickerLabelvalue.PRODUCT_CODE}
+                                    </text>
+                                  ) : (
+                                    <>
+                                      {(wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                        "MNBAL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNETL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNGRM_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNHTF_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER ==
+                                          "MNPLM_01") && (
+                                        <text>
+                                          {wipstickerLabelvalue.MSURFACE}
+                                        </text>
+                                      )}
+                                      {(wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                        "MNBAL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNETL_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNGRM_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNHTF_01" ||
+                                        wipstickerLabelvalue.TMM_WORK_CENTER !=
+                                          "MNPLM_01") && (
+                                        <text>
+                                          {wipstickerLabelvalue.PKGMODE}
+                                        </text>
+                                      )}
+                                    </>
+                                  )}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  <label>
+                                    WIDTH -
+                                    {wipstickerLabelvalue.PLN_CR_WIDTH !=
+                                      null && (
+                                      <text>
+                                        {wipstickerLabelvalue.PLN_CR_WIDTH +
+                                          " MM"}
+                                      </text>
+                                    )}
+                                  </label>
+                                </TableCell>
+                                <TableCell align="left" style={{}}></TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                          {/* </TableContainer> */}
+                        </Grid>
+                      )}
+                    {wipstickerLabelvalue.TMM_LABEL_SIZE == "S" &&
+                      Sticker0782Fur == "1" && (
+                        <Grid
+                          item
+                          xs={12}
+                          ref={componentRef}
+                          //id="print-report-student-div-WIPAC"
+                          id="smallsticker"
+                        >
+                          <Table
+                            sx={{ minHeight: "120px" }}
+                            style={{ border: 1 }}
+                            cellspacing="0"
+                            cellpadding="0"
+                          >
+                            <TableBody>
+                              <TableRow>
+                                <TableCell
+                                  size="small"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  CUSTOMER NAME
+                                </TableCell>
+                                <TableCell
+                                  colSpan={3}
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.CUST}
+                                </TableCell>
+                                <TableCell
+                                  rowSpan={6}
+                                  align="left"
+                                  style={{ textAlign: "left" }}
+                                >
+                                  <QRCode
+                                    value={qrCodeValue}
+                                    size={100}
+                                    style={{
+                                      height: "6rem",
+                                      width: "8rem",
+                                      marginTop: "-10px",
+                                    }}
+                                  />
+
+                                  <img
+                                    src={logosmall}
+                                    alt="logo"
+                                    style={{
+                                      width: "6rem",
+                                      height: "3rem",
+                                      margin: "2px",
+                                      display: "block",
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  PRODUCT DESC.
+                                </TableCell>
+                                <TableCell
+                                  colSpan={3}
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {serverDetails?.Plant === "0742" &&
+                                  (wipstickerLabelvalue.DIV_FLAG === "Y" ||
+                                    wipstickerLabelvalue.DIV_FLAG === "A")
+                                    ? wipstickerLabelvalue?.PRODMATDESC
+                                    : wipstickerLabelvalue.MAT_DESC}
+                                  {/* {wipstickerLabelvalue.MAT_DESC} */}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  MOTHER BATCH
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.MOTHER_BATCH}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  GRADE
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.GRADE}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  BATCH NO.
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={
+                                    serverDetails?.Plant === "0742"
+                                      ? {
+                                          fontSize: "1.8rem",
+                                          fontWeight: "bold",
+                                          textAlign: "left",
+                                        }
+                                      : {
+                                          fontSize: "1.2rem",
+                                          fontWeight: "bold",
+                                          textAlign: "left",
+                                        }
+                                  }
+                                >
+                                  {wipstickerLabelvalue.BATCHNO}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  Width
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.width != null && (
+                                    <text>
+                                      {wipstickerLabelvalue.width + " MM"}
+                                    </text>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                {!props?.weightVisible && (
+                                  <>
+                                    <TableCell
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                        textAlign: "left",
+                                      }}
+                                    >
+                                      Weight
+                                    </TableCell>
+                                    <TableCell
+                                      align="left"
+                                      style={{
+                                        fontSize: "1.2rem",
+                                        fontWeight: "bold",
+                                        textAlign: "left",
+                                      }}
+                                    >
+                                      {wipstickerLabelvalue.WIPWT != null && (
+                                        <text>
+                                          {wipstickerLabelvalue.WIPWT.toFixed(
+                                            3
+                                          ) + " MT"}
+                                        </text>
+                                      )}
+                                    </TableCell>
+                                  </>
+                                )}
+
+                                {props?.weightVisible && (
+                                  <>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                  </>
+                                )}
+
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  <label>
+                                    Thickness -
+                                    {wipstickerLabelvalue.PLN_CR_THICK !=
+                                      null && (
+                                      <text>
+                                        {wipstickerLabelvalue.PLN_CR_THICK.toFixed(
+                                          3
+                                        ) + " MM"}
+                                      </text>
+                                    )}
+                                  </label>
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  <label>
+                                    Length
+                                    {wipstickerLabelvalue.WIPLENGTH != null && (
+                                      <text>
+                                        {wipstickerLabelvalue.WIPLENGTH + " MM"}
+                                      </text>
+                                    )}
+                                  </label>
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  Fin.-{wipstickerLabelvalue.MSURFACE}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  Edg.Cond.-{wipstickerLabelvalue.EDGECOND}
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  <label>
+                                    Hardness-
+                                    {wipstickerLabelvalue.HARDNESS}
+                                  </label>
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontSize: "1rem",
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  {wipstickerLabelvalue.PREMARKS != null &&
+                                  wipstickerLabelvalue.PREMARKS != ""
+                                    ? wipstickerLabelvalue.PREMARKS.length > 19
+                                      ? wipstickerLabelvalue.PREMARKS.substring(
+                                          0,
+                                          19
+                                        )
+                                      : wipstickerLabelvalue.PREMARKS
+                                    : wipstickerLabelvalue.PREMARKS}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                          {/* </TableContainer> */}
+                        </Grid>
+                      )}
+                    <br />
+                    <br />
+                  </React.Fragment>
+                );
+              })}
+          </MDBox>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+            style={{ marginTop: "0.5rem" }}
+          >
+            <Button onClick={handleClose}>Close</Button>
+            {labelSize == "S" && (
+              <>
+                <ReactToPrint
+                  pageStyle={pageStyleSmall}
+                  trigger={() => (
+                    <MDButton size="small" color="info">
+                      Print
+                    </MDButton>
+                  )}
+                  content={() => componentRef.current}
+                />
+              </>
+            )}
+            {labelSize !== "S" && (
+              <>
+                <ReactToPrint
+                  pageStyle={pageStyle}
+                  trigger={() => (
+                    <MDButton size="small" color="info">
+                      Print
+                    </MDButton>
+                  )}
+                  content={() => componentRef.current}
+                />
+              </>
+            )}
+          </Grid>
+        </DialogContent>
+        <DialogActions></DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}
