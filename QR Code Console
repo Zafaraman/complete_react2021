@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using QRCoder;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Enter the batch number:");
+        string batchNumber = Console.ReadLine();
+
+        Console.WriteLine("Enter the product description:");
+        string productDescription = Console.ReadLine();
+
+        Console.WriteLine("Enter the grade:");
+        string grade = Console.ReadLine();
+
+        Console.WriteLine("Enter the width:");
+        string width = Console.ReadLine();
+
+        Console.WriteLine("Enter the length:");
+        string length = Console.ReadLine();
+
+        string qrCodeValue = $"{batchNumber},{productDescription},{grade},{width},{length}";
+
+        GenerateQRCode(qrCodeValue);
+
+        PrintQRCodeLabel();
+    }
+
+    static void GenerateQRCode(string qrCodeValue)
+    {
+        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeValue, QRCodeGenerator.ECCLevel.Q);
+        QRCode qrCode = new QRCode(qrCodeData);
+        Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+        // Save the QR code image to a file
+        qrCodeImage.Save("qrcode.png");
+    }
+
+    static void PrintQRCodeLabel()
+    {
+        // Load the QR code image
+        Bitmap qrCodeImage = new Bitmap("qrcode.png");
+
+        // Create a print document
+        PrintDocument printDocument = new PrintDocument();
+        printDocument.PrintPage += (sender, e) =>
+        {
+            // Draw the QR code image on the print page
+            e.Graphics.DrawImage(qrCodeImage, 0, 0);
+        };
+
+        // Print the document
+        printDocument.Print();
+    }
+}
