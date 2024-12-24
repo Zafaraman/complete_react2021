@@ -1,21 +1,16 @@
-namespace QRCodeGeneratorApp
+namespace WIPDetails
 {
-    partial class MainForm
+    partial class WIPDetailsForm
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.TextBox txtCustomerName;
-        private System.Windows.Forms.TextBox txtProductDesc;
-        private System.Windows.Forms.TextBox txtBatchNumber;
-        private System.Windows.Forms.TextBox txtThickness;
-        private System.Windows.Forms.TextBox txtWidth;
-        private System.Windows.Forms.TextBox txtWeight;
-        private System.Windows.Forms.TextBox txtDateShift;
-        private System.Windows.Forms.PictureBox picQRCode;
-        private System.Windows.Forms.Button btnGenerateQRCode;
-        private System.Windows.Forms.Button btnPrint;
-        private System.Drawing.Printing.PrintDocument printDocument1;
-        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -25,89 +20,127 @@ namespace QRCodeGeneratorApp
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
-            this.txtCustomerName = new System.Windows.Forms.TextBox();
-            this.txtProductDesc = new System.Windows.Forms.TextBox();
-            this.txtBatchNumber = new System.Windows.Forms.TextBox();
-            this.txtThickness = new System.Windows.Forms.TextBox();
-            this.txtWidth = new System.Windows.Forms.TextBox();
-            this.txtWeight = new System.Windows.Forms.TextBox();
-            this.txtDateShift = new System.Windows.Forms.TextBox();
-            this.picQRCode = new System.Windows.Forms.PictureBox();
-            this.btnGenerateQRCode = new System.Windows.Forms.Button();
-            this.btnPrint = new System.Windows.Forms.Button();
-            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
-            this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.picQRCode)).BeginInit();
-            this.SuspendLayout();
+            this.components = new System.ComponentModel.Container();
+            this.customerNameBox = new System.Windows.Forms.TextBox();
+            this.productDescBox = new System.Windows.Forms.TextBox();
+            this.batchNumberBox = new System.Windows.Forms.TextBox();
+            this.thicknessBox = new System.Windows.Forms.TextBox();
+            this.widthBox = new System.Windows.Forms.TextBox();
+            this.weightBox = new System.Windows.Forms.TextBox();
+            this.dateShiftBox = new System.Windows.Forms.TextBox();
+            this.topCoatColorBox = new System.Windows.Forms.TextBox();
+            this.bottomCoatColorBox = new System.Windows.Forms.TextBox();
+            this.processRouteBox = new System.Windows.Forms.TextBox();
+            this.qrCodeBox = new System.Windows.Forms.PictureBox();
+            this.generateButton = new System.Windows.Forms.Button();
+            this.printButton = new System.Windows.Forms.Button();
             
-            // TextBoxes
-            this.txtCustomerName.Location = new System.Drawing.Point(30, 30);
-            this.txtCustomerName.Size = new System.Drawing.Size(200, 22);
-            this.txtCustomerName.PlaceholderText = "Customer Name";
+            // Labels
+            this.lblCustomerName = new System.Windows.Forms.Label();
+            this.lblProductDesc = new System.Windows.Forms.Label();
+            this.lblBatchNumber = new System.Windows.Forms.Label();
+            this.lblThickness = new System.Windows.Forms.Label();
+            this.lblWidth = new System.Windows.Forms.Label();
+            this.lblWeight = new System.Windows.Forms.Label();
+            this.lblDateShift = new System.Windows.Forms.Label();
+            this.lblTopCoat = new System.Windows.Forms.Label();
+            this.lblBottomCoat = new System.Windows.Forms.Label();
+            this.lblProcessRoute = new System.Windows.Forms.Label();
             
-            this.txtProductDesc.Location = new System.Drawing.Point(30, 70);
-            this.txtProductDesc.Size = new System.Drawing.Size(200, 22);
-            this.txtProductDesc.PlaceholderText = "Product Desc.";
-
-            this.txtBatchNumber.Location = new System.Drawing.Point(30, 110);
-            this.txtBatchNumber.Size = new System.Drawing.Size(200, 22);
-            this.txtBatchNumber.PlaceholderText = "Batch Number";
-
-            this.txtThickness.Location = new System.Drawing.Point(30, 150);
-            this.txtThickness.Size = new System.Drawing.Size(200, 22);
-            this.txtThickness.PlaceholderText = "Thickness";
-
-            this.txtWidth.Location = new System.Drawing.Point(30, 190);
-            this.txtWidth.Size = new System.Drawing.Size(200, 22);
-            this.txtWidth.PlaceholderText = "Width";
-
-            this.txtWeight.Location = new System.Drawing.Point(30, 230);
-            this.txtWeight.Size = new System.Drawing.Size(200, 22);
-            this.txtWeight.PlaceholderText = "Weight";
-
-            this.txtDateShift.Location = new System.Drawing.Point(30, 270);
-            this.txtDateShift.Size = new System.Drawing.Size(200, 22);
-            this.txtDateShift.PlaceholderText = "Date/Shift";
-
-            // PictureBox
-            this.picQRCode.Location = new System.Drawing.Point(260, 30);
-            this.picQRCode.Size = new System.Drawing.Size(200, 200);
-            this.picQRCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-
-            // Buttons
-            this.btnGenerateQRCode.Location = new System.Drawing.Point(30, 320);
-            this.btnGenerateQRCode.Size = new System.Drawing.Size(150, 30);
-            this.btnGenerateQRCode.Text = "Generate QR Code";
-            this.btnGenerateQRCode.Click += new System.EventHandler(this.btnGenerateQRCode_Click);
-
-            this.btnPrint.Location = new System.Drawing.Point(200, 320);
-            this.btnPrint.Size = new System.Drawing.Size(100, 30);
-            this.btnPrint.Text = "Print";
-            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
-
-            // Print Preview Dialog
-            this.printPreviewDialog1.Document = this.printDocument1;
-            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
-
-            // Form
-            this.ClientSize = new System.Drawing.Size(500, 400);
-            this.Controls.Add(this.txtCustomerName);
-            this.Controls.Add(this.txtProductDesc);
-            this.Controls.Add(this.txtBatchNumber);
-            this.Controls.Add(this.txtThickness);
-            this.Controls.Add(this.txtWidth);
-            this.Controls.Add(this.txtWeight);
-            this.Controls.Add(this.txtDateShift);
-            this.Controls.Add(this.picQRCode);
-            this.Controls.Add(this.btnGenerateQRCode);
-            this.Controls.Add(this.btnPrint);
-            this.Name = "MainForm";
-            this.Text = "QR Code Generator";
-            ((System.ComponentModel.ISupportInitialize)(this.picQRCode)).EndInit();
+            // Main TableLayoutPanel
+            this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            
+            // Button Panel
+            this.buttonPanel = new System.Windows.Forms.FlowLayoutPanel();
+            
+            // Set form properties
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 600);
+            this.Name = "WIPDetailsForm";
+            this.Text = "WIP Details";
+            
+            // Initialize controls
+            ((System.ComponentModel.ISupportInitialize)(this.qrCodeBox)).BeginInit();
+            
+            // Set label texts
+            this.lblCustomerName.Text = "Customer Name:";
+            this.lblProductDesc.Text = "Product Desc.:";
+            this.lblBatchNumber.Text = "Batch Number:";
+            this.lblThickness.Text = "Thickness:";
+            this.lblWidth.Text = "Width:";
+            this.lblWeight.Text = "Weight:";
+            this.lblDateShift.Text = "Date/Shift:";
+            this.lblTopCoat.Text = "Top Coat Color:";
+            this.lblBottomCoat.Text = "Bottom Coat Color:";
+            this.lblProcessRoute.Text = "Process Route:";
+            
+            // Set default textbox values
+            this.customerNameBox.Text = "TATA BLUESCOPE STEEL PRIVATE LIMITE";
+            this.productDescBox.Text = "PPGL C Y550PL HPL3 0.50BMT(0.58TPT)X610";
+            this.batchNumberBox.Text = "K4C1072100";
+            this.thicknessBox.Text = "0.500 MM";
+            this.widthBox.Text = "1235 MM";
+            this.weightBox.Text = "15.160 MT";
+            this.dateShiftBox.Text = "22-DEC-24/B";
+            this.topCoatColorBox.Text = "ROYAL LIGHT BLUE TSL 245";
+            this.bottomCoatColorBox.Text = "7035/TSL-629B";
+            this.processRouteBox.Text = "CCL CRS (P-M2-TR-QA-GL-QA-C-QA-R-QA-PACK)";
+            
+            // Configure QR Code PictureBox
+            this.qrCodeBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.qrCodeBox.Location = new System.Drawing.Point(600, 20);
+            this.qrCodeBox.Size = new System.Drawing.Size(150, 150);
+            this.qrCodeBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            
+            // Configure buttons
+            this.generateButton.Text = "Generate QR Code";
+            this.generateButton.Size = new System.Drawing.Size(120, 30);
+            this.printButton.Text = "Print Form";
+            this.printButton.Size = new System.Drawing.Size(120, 30);
+            
+            // Add controls to form
+            this.Controls.Add(this.mainTableLayout);
+            this.Controls.Add(this.buttonPanel);
+            
+            ((System.ComponentModel.ISupportInitialize)(this.qrCodeBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
+
+        #endregion
+
+        private System.Windows.Forms.TextBox customerNameBox;
+        private System.Windows.Forms.TextBox productDescBox;
+        private System.Windows.Forms.TextBox batchNumberBox;
+        private System.Windows.Forms.TextBox thicknessBox;
+        private System.Windows.Forms.TextBox widthBox;
+        private System.Windows.Forms.TextBox weightBox;
+        private System.Windows.Forms.TextBox dateShiftBox;
+        private System.Windows.Forms.TextBox topCoatColorBox;
+        private System.Windows.Forms.TextBox bottomCoatColorBox;
+        private System.Windows.Forms.TextBox processRouteBox;
+        private System.Windows.Forms.PictureBox qrCodeBox;
+        private System.Windows.Forms.Button generateButton;
+        private System.Windows.Forms.Button printButton;
+        private System.Windows.Forms.Label lblCustomerName;
+        private System.Windows.Forms.Label lblProductDesc;
+        private System.Windows.Forms.Label lblBatchNumber;
+        private System.Windows.Forms.Label lblThickness;
+        private System.Windows.Forms.Label lblWidth;
+        private System.Windows.Forms.Label lblWeight;
+        private System.Windows.Forms.Label lblDateShift;
+        private System.Windows.Forms.Label lblTopCoat;
+        private System.Windows.Forms.Label lblBottomCoat;
+        private System.Windows.Forms.Label lblProcessRoute;
+        private System.Windows.Forms.TableLayoutPanel mainTableLayout;
+        private System.Windows.Forms.FlowLayoutPanel buttonPanel;
     }
 }
