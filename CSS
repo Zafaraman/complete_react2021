@@ -1,291 +1,46 @@
-
-table,
-th,
-td {
-  border: 3px solid black;
-  border-collapse: collapse;
-}
-table,
-tr,
-td {
-  border: 3px solid black;
-  border-collapse: collapse;
-}
-#smallsticker td {
-  line-height: 0.3px !important;
-}
-
-/* ///////////////////////////// */
-
-.essential-label {
-  font-weight: 500;
-  font-size: 20px;
-}
-
-.essential-value {
-  font-weight: 500;
-  font-size: 25px;
-}
-
-/* @font-face {
-  font-family: InterBlackFont;
-  src: url("../../../assets/fonts/Inter-Black.ttf");
-}
-
-@font-face {
-  font-family: InterSemiBoldFont;
-  src: url("../../../assets/fonts/Inter-SemiBold.ttf");
-}
-
-@font-face {
-  font-family: MyriadPro;
-  src: url("../../../assets/fonts/MyriadPro-Regular.otf");
-} */
-
-.interblack {
-  font-family: InterBlackFont;
-}
-
-.inter-semi-bold {
-  font-family: InterSemiBoldFont;
-}
-
-.myriad-pro {
-  font-family: MyriadPro;
-}
-
-.main-container {
-  margin-bottom: 10px;
-  /* width: 661px; */
-  margin: 0 auto;
-
-  width: 165mm;         /*155mm */
-  height: 101.6mm;      /* 101.6mm*/
-}
-
-.main-container .display-flex {
-  display: flex;
-  justify-content: space-between;
-}
-
-.main-container .product-name {
-  border: 2px solid #000;
-  text-align: center;
-  padding: 3px;
-  font-size: 16pt;
-  margin-top: 5px;
-  color: #000;
-  margin-left: 2px;
-}
-
-.main-container .essential-container {
-  display: flex;
-  margin-top: 7px;
-  margin-left: 2px;
-}
-
-.main-container hr {
-  border: 1px solid #000;
-}
-
-/* .main-container .essential-container .items {
-    width: 50%;
-  } */
-
-.main-container .essential-container .items1 {
-  width: 64%;
-}
-
-.main-container .essential-container .items2 {
-  width: 36%;
-  position: relative;
-}
-
-.main-container .essential-container .items .label {
-  font-size: 9pt;
-  color: #000;
-  font-family: InterSemiBoldFont;
-}
-
-.main-container .essential-container .items .value {
-  font-size: 10.5pt;
-  color: #000;
-  font-family: InterBlackFont;
-}
-
-.variable-main-container {
-  display: flex;
-  margin-left: 2px;
-}
-
-.variable-container {
-  margin-top: 7px;
-}
-
-.main-container .plant-location-sbd {
-  font-size: 11pt;
-  color: #000;
-  text-align: center;
-  left: 26%;
-  top: 40%;
-  position: absolute;
-}
-
-.main-container .plant-location-khopoli {
-  font-size: 11pt;
-  color: #000;
-  text-align: center;
-  left: 30%;
-  top: 40%;
-  position: absolute;
-}
-
-.main-container .plant-location-angul {
-  font-size: 11pt;
-  color: #000;
-  text-align: center;
-  left: 24%;
-  top: 40%;
-  position: absolute;
-}
-
-.variable-main-container .variable-container-item {
-  width: 91%;
-}
-
-.variable-main-container .variable-container {
-  display: flex;
-  width: 100%;
-}
-
-.variable-main-container .variable-container .items {
-  width: 35.75%;
-}
-
-.variable-main-container .variable-container .items .label {
-  font-size: 8pt;
-  color: #000;
-  font-family: InterSemiBoldFont;
-  min-width: 200px;
-}
-
-.variable-main-container .variable-container .items .value {
-  font-size: 8pt;
-  color: #000;
-  font-family: InterBlackFont;
-  max-width: 170px;
-}
-
-.isi-logo-position {
-  position: absolute;
-  right: 0;
-  bottom: 28px;
-  text-align: right;
-}
-.barcode-box {
-  width: 65.5% !important;
-  position: relative;
-}
-
-.barcode-box svg {
-  max-width: 500px;
-  /* position: absolute; */
-  top: -4px;
-  margin-left: -7px;
-}
-
-.barcode-box img {
-  max-width: 500px;
-  position: absolute;
-  top: -4px;
-  left: -12px;
-}
-
-
-.inspection_date_box {
-  margin-top: 6px;
-  width: 12%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.inspection_date_box .inspectionLabel {
-  font-size: 6pt;
-  color: #000;
-  margin-top: 7px;
-  font-family: InterSemiBoldFont;
-  margin-right: 18px; 
-}
-.inspection_date_box .inspectionDate {
-  font-size: 6pt;
-  color: #000;
-  font-weight: 600;
-  margin-top: 3px;
-  font-family: InterBlackFont;
-  margin-right: 18px;
-}
-
-.inspection_date_box .inspectedby {
-  font-size: 6pt;
-  color: #000;
-  margin-top: 7px;
-  font-family: InterSemiBoldFont;
-  margin-right: 18px; 
-  /* margin-right: 18px;  added by Mayuresh */
-}
-
-.inspection_date_box .inspectionSeal {
-  background-color: #ddd;
-  width: 62px;
-  height: 62px;
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
-  /* margin: 12px auto; */
-  margin-top: 21px;
-}
-
-.crm-text {
-  /* width: 75% !important; */
-  width: 187% !important;
-  position: relative;
-}
-
-.crm-container {
-  height: 40px;
-  border: 2px solid #000;
-  margin-top: 0px;
-  width: 95% !important;
-  color:#000
-}
-
-.crm-container .label-crm {
-  border: 1px solid #000;
-  height: 13px;
-  font-size: 6.5pt;
-  font-family: InterBlackFont;
-  padding: 2px;
-}
-
-.crm-container .value-crm {
-  border: 1px solid #000;
-  height: 25px;
-  font-size: 6.5pt;
-  font-family: InterSemiBoldFont;
-  padding: 2px;
-}
-
-.make-in-india-logo{
-  height: 20mm;
-  width: 30mm;
-  border: 2px solid black;
-  font-family: 'Arial Black';
-
-  text-align: center;
-  padding: 10px;
-  font-size: 10.5pt;
-  color: #000;
-}
+INSERT INTO [dbo].[PIMSUSER] 
+(
+    [EmployeeID],
+    [NewEmployeeID],
+    [TitleID],
+    [Password],
+    [FirstName],
+    [LastName],
+    [DOB],
+    [ProfilePic],
+    [Email],
+    [MobileNo],
+    [Active],
+    [RoleID],
+    [EmployeeTypeID],
+    [CreatedOn],
+    [CreatedBy],
+    [ModifiedOn],
+    [ModifiedBy],
+    [DeactivatedDate],
+    [ABPFill],
+    [DPRFill]
+)
+VALUES
+(
+    '921076',            -- EmployeeID
+    NULL,                -- NewEmployeeID (Assuming NULL as it's not provided)
+    NULL,                -- TitleID (Assuming NULL as it's not provided)
+    NULL,                -- Password (Assuming NULL as it's not provided)
+    'Atul',              -- FirstName
+    'Kumar',             -- LastName
+    NULL,                -- DOB (Assuming NULL as it's not provided)
+    NULL,                -- ProfilePic (Assuming NULL as it's not provided)
+    NULL,                -- Email (Assuming NULL as it's not provided)
+    '7984158141',        -- MobileNo
+    1,                   -- Active (Assuming 1 as Active status)
+    NULL,                -- RoleID (Assuming NULL as it's not provided)
+    NULL,                -- EmployeeTypeID (Assuming NULL as it's not provided)
+    GETDATE(),           -- CreatedOn (Current date and time)
+    NULL,                -- CreatedBy (Assuming NULL as it's not provided)
+    NULL,                -- ModifiedOn (Assuming NULL as it's not provided)
+    NULL,                -- ModifiedBy (Assuming NULL as it's not provided)
+    NULL,                -- DeactivatedDate (Assuming NULL as it's not provided)
+    NULL,                -- ABPFill (Assuming NULL as it's not provided)
+    NULL                 -- DPRFill (Assuming NULL as it's not provided)
+);
