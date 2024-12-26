@@ -1,4 +1,4 @@
-namespace WIPDetails
+namespace WIPDetailsApplication
 {
     partial class WIPDetailsForm
     {
@@ -29,118 +29,151 @@ namespace WIPDetails
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.customerNameBox = new System.Windows.Forms.TextBox();
-            this.productDescBox = new System.Windows.Forms.TextBox();
-            this.batchNumberBox = new System.Windows.Forms.TextBox();
-            this.thicknessBox = new System.Windows.Forms.TextBox();
-            this.widthBox = new System.Windows.Forms.TextBox();
-            this.weightBox = new System.Windows.Forms.TextBox();
-            this.dateShiftBox = new System.Windows.Forms.TextBox();
-            this.topCoatColorBox = new System.Windows.Forms.TextBox();
-            this.bottomCoatColorBox = new System.Windows.Forms.TextBox();
-            this.processRouteBox = new System.Windows.Forms.TextBox();
-            this.qrCodeBox = new System.Windows.Forms.PictureBox();
-            this.generateButton = new System.Windows.Forms.Button();
-            this.printButton = new System.Windows.Forms.Button();
+            this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.headerPanel = new System.Windows.Forms.Panel();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.detailsPanel = new System.Windows.Forms.Panel();
             
-            // Labels
+            // Customer Name
             this.lblCustomerName = new System.Windows.Forms.Label();
+            this.txtCustomerName = new System.Windows.Forms.TextBox();
+            
+            // Product Description
             this.lblProductDesc = new System.Windows.Forms.Label();
+            this.txtProductDesc = new System.Windows.Forms.TextBox();
+            
+            // Batch Number
             this.lblBatchNumber = new System.Windows.Forms.Label();
+            this.txtBatchNumber = new System.Windows.Forms.TextBox();
+            
+            // Thickness
             this.lblThickness = new System.Windows.Forms.Label();
+            this.txtThickness = new System.Windows.Forms.TextBox();
+            
+            // Width
             this.lblWidth = new System.Windows.Forms.Label();
+            this.txtWidth = new System.Windows.Forms.TextBox();
+            
+            // Surface Finish
+            this.lblSurfaceFinish = new System.Windows.Forms.Label();
+            this.txtSurfaceFinish = new System.Windows.Forms.TextBox();
+            
+            // Right side controls
+            this.lblMotherBatch = new System.Windows.Forms.Label();
+            this.txtMotherBatch = new System.Windows.Forms.TextBox();
+            
+            this.lblCustomerGrade = new System.Windows.Forms.Label();
+            this.txtCustomerGrade = new System.Windows.Forms.TextBox();
+            
             this.lblWeight = new System.Windows.Forms.Label();
+            this.txtWeight = new System.Windows.Forms.TextBox();
+            
             this.lblDateShift = new System.Windows.Forms.Label();
-            this.lblTopCoat = new System.Windows.Forms.Label();
-            this.lblBottomCoat = new System.Windows.Forms.Label();
+            this.txtDateShift = new System.Windows.Forms.TextBox();
+            
+            // QR Code
+            this.picBoxQRCode = new System.Windows.Forms.PictureBox();
+            
+            // Process Information
+            this.lblPreviousStageRemarks = new System.Windows.Forms.Label();
+            this.txtPreviousStageRemarks = new System.Windows.Forms.TextBox();
+            
             this.lblProcessRoute = new System.Windows.Forms.Label();
+            this.txtProcessRoute = new System.Windows.Forms.TextBox();
             
-            // Main TableLayoutPanel
-            this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.lblCurrentWorkcenter = new System.Windows.Forms.Label();
+            this.txtCurrentWorkcenter = new System.Windows.Forms.TextBox();
             
-            // Button Panel
-            this.buttonPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblNextWorkcenter = new System.Windows.Forms.Label();
+            this.txtNextWorkcenter = new System.Windows.Forms.TextBox();
             
+            this.lblTopCoatColor = new System.Windows.Forms.Label();
+            this.txtTopCoatColor = new System.Windows.Forms.TextBox();
+            
+            this.lblBottomCoatColor = new System.Windows.Forms.Label();
+            this.txtBottomCoatColor = new System.Windows.Forms.TextBox();
+            
+            // IEO Group Box
+            this.grpIEO = new System.Windows.Forms.GroupBox();
+            this.lblNoOfSheet = new System.Windows.Forms.Label();
+            this.txtNoOfSheet = new System.Windows.Forms.TextBox();
+            this.lblProductType = new System.Windows.Forms.Label();
+            this.txtProductType = new System.Windows.Forms.TextBox();
+
+            // Initialize Layout
+            this.InitializeLayout();
+
             // Set form properties
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 600);
+            this.ClientSize = new System.Drawing.Size(884, 661);
             this.Name = "WIPDetailsForm";
             this.Text = "WIP Details";
-            
-            // Initialize controls
-            ((System.ComponentModel.ISupportInitialize)(this.qrCodeBox)).BeginInit();
-            
-            // Set label texts
-            this.lblCustomerName.Text = "Customer Name:";
-            this.lblProductDesc.Text = "Product Desc.:";
-            this.lblBatchNumber.Text = "Batch Number:";
-            this.lblThickness.Text = "Thickness:";
-            this.lblWidth.Text = "Width:";
-            this.lblWeight.Text = "Weight:";
-            this.lblDateShift.Text = "Date/Shift:";
-            this.lblTopCoat.Text = "Top Coat Color:";
-            this.lblBottomCoat.Text = "Bottom Coat Color:";
-            this.lblProcessRoute.Text = "Process Route:";
-            
-            // Set default textbox values
-            this.customerNameBox.Text = "TATA BLUESCOPE STEEL PRIVATE LIMITE";
-            this.productDescBox.Text = "PPGL C Y550PL HPL3 0.50BMT(0.58TPT)X610";
-            this.batchNumberBox.Text = "K4C1072100";
-            this.thicknessBox.Text = "0.500 MM";
-            this.widthBox.Text = "1235 MM";
-            this.weightBox.Text = "15.160 MT";
-            this.dateShiftBox.Text = "22-DEC-24/B";
-            this.topCoatColorBox.Text = "ROYAL LIGHT BLUE TSL 245";
-            this.bottomCoatColorBox.Text = "7035/TSL-629B";
-            this.processRouteBox.Text = "CCL CRS (P-M2-TR-QA-GL-QA-C-QA-R-QA-PACK)";
-            
-            // Configure QR Code PictureBox
-            this.qrCodeBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.qrCodeBox.Location = new System.Drawing.Point(600, 20);
-            this.qrCodeBox.Size = new System.Drawing.Size(150, 150);
-            this.qrCodeBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            
-            // Configure buttons
-            this.generateButton.Text = "Generate QR Code";
-            this.generateButton.Size = new System.Drawing.Size(120, 30);
-            this.printButton.Text = "Print Form";
-            this.printButton.Size = new System.Drawing.Size(120, 30);
-            
-            // Add controls to form
-            this.Controls.Add(this.mainTableLayout);
-            this.Controls.Add(this.buttonPanel);
-            
-            ((System.ComponentModel.ISupportInitialize)(this.qrCodeBox)).EndInit();
             this.ResumeLayout(false);
+        }
+
+        private void InitializeLayout()
+        {
+            // Main Layout
+            this.mainLayoutPanel.ColumnCount = 2;
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            
+            // Header
+            this.lblTitle.Text = "WIP Details";
+            this.lblTitle.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.headerPanel.Controls.Add(this.lblTitle);
+            
+            // Left Column Controls
+            this.SetupLeftColumnControls();
+            
+            // Right Column Controls
+            this.SetupRightColumnControls();
+            
+            // Add panels to form
+            this.Controls.Add(this.mainLayoutPanel);
+        }
+
+        private void SetupLeftColumnControls()
+        {
+            // Customer Name
+            this.lblCustomerName.Text = "Customer Name";
+            this.txtCustomerName.Text = "TATA BLUESCOPE STEEL PRIVATE LIMITE";
+            this.txtCustomerName.ReadOnly = true;
+            
+            // Product Description
+            this.lblProductDesc.Text = "Product Desc.";
+            this.txtProductDesc.Text = "PPGL C Y550PL HPL3 0.50BMT(0.58TPT)X610";
+            this.txtProductDesc.ReadOnly = true;
+            
+            // Continue setting up other left column controls...
+        }
+
+        private void SetupRightColumnControls()
+        {
+            // Mother Batch
+            this.lblMotherBatch.Text = "Mother Batch";
+            this.txtMotherBatch.ReadOnly = true;
+            
+            // Customer Grade
+            this.lblCustomerGrade.Text = "Customer Grade";
+            this.txtCustomerGrade.ReadOnly = true;
+            
+            // Continue setting up other right column controls...
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox customerNameBox;
-        private System.Windows.Forms.TextBox productDescBox;
-        private System.Windows.Forms.TextBox batchNumberBox;
-        private System.Windows.Forms.TextBox thicknessBox;
-        private System.Windows.Forms.TextBox widthBox;
-        private System.Windows.Forms.TextBox weightBox;
-        private System.Windows.Forms.TextBox dateShiftBox;
-        private System.Windows.Forms.TextBox topCoatColorBox;
-        private System.Windows.Forms.TextBox bottomCoatColorBox;
-        private System.Windows.Forms.TextBox processRouteBox;
-        private System.Windows.Forms.PictureBox qrCodeBox;
-        private System.Windows.Forms.Button generateButton;
-        private System.Windows.Forms.Button printButton;
+        private System.Windows.Forms.TableLayoutPanel mainLayoutPanel;
+        private System.Windows.Forms.Panel headerPanel;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Panel detailsPanel;
         private System.Windows.Forms.Label lblCustomerName;
+        private System.Windows.Forms.TextBox txtCustomerName;
         private System.Windows.Forms.Label lblProductDesc;
-        private System.Windows.Forms.Label lblBatchNumber;
-        private System.Windows.Forms.Label lblThickness;
-        private System.Windows.Forms.Label lblWidth;
-        private System.Windows.Forms.Label lblWeight;
-        private System.Windows.Forms.Label lblDateShift;
-        private System.Windows.Forms.Label lblTopCoat;
-        private System.Windows.Forms.Label lblBottomCoat;
-        private System.Windows.Forms.Label lblProcessRoute;
-        private System.Windows.Forms.TableLayoutPanel mainTableLayout;
-        private System.Windows.Forms.FlowLayoutPanel buttonPanel;
+        private System.Windows.Forms.TextBox txtProductDesc;
+        // ... continue declaring all other controls
     }
 }
