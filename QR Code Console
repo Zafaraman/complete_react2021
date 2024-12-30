@@ -1,60 +1,139 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
+using System.Windows.Forms;
 using QRCoder;
 
-class Program
+public class QRCodeForm : Form
 {
-    static void Main(string[] args)
+    private TextBox batchNumberTextBox;
+    private TextBox productDescriptionTextBox;
+    private TextBox gradeTextBox;
+    private TextBox widthTextBox;
+    private TextBox lengthTextBox;
+    private Button generateQRCodeButton;
+    private Button printQRCodeButton;
+    private PictureBox qrCodePictureBox;
+
+    public QRCodeForm()
     {
-        Console.WriteLine("Enter the batch number:");
-        string batchNumber = Console.ReadLine();
+        this.Size = new Size(400, 400);
+        this.Text = "QR Code Generator";
 
-        Console.WriteLine("Enter the product description:");
-        string productDescription = Console.ReadLine();
+        batchNumberTextBox = new TextBox
+        {
+            Location = new Point(10, 10),
+            Size = new Size(200, 20)
+        };
+        this.Controls.Add(batchNumberTextBox);
 
-        Console.WriteLine("Enter the grade:");
-        string grade = Console.ReadLine();
+        productDescriptionTextBox = new TextBox
+        {
+            Location = new Point(10, 40),
+            Size = new Size(200, 20)
+        };
+        this.Controls.Add(productDescriptionTextBox);
 
-        Console.WriteLine("Enter the width:");
-        string width = Console.ReadLine();
+        gradeTextBox = new TextBox
+        {
+            Location = new Point(10, 70),
+            Size = new Size(200, 20)
+        };
+        this.Controls.Add(gradeTextBox);
 
-        Console.WriteLine("Enter the length:");
-        string length = Console.ReadLine();
+        widthTextBox = new TextBox
+        {
+            Location = new Point(10, 100),
+            Size = new Size(200, 20)
+        };
+        this.Controls.Add(widthTextBox);
+
+        lengthTextBox = new TextBox
+        {
+            Location = new Point(10, 130),
+            Size = new Size(200, 20)
+        };
+        this.Controls.Add(lengthTextBox);
+
+        generateQRCodeButton = new Button
+        {
+            Location = new Point(10, 160),
+            Size = new Size(100, 20),
+            Text = "Generate QR Code"
+        };
+        generateQRCodeButton.Click += GenerateQRCodeButton_Click;
+        this.Controls.Add(generateQRCodeButton);
+
+        printQRCodeButton = new Button
+        {
+            Location = new Point(120, 160),
+            Size = new Size(100, 20),
+            Text = "Print QR Code",
+            Enabled = false
+        };
+        printQRCodeButton.Click += PrintQRCodeButton_Click;
+        this.Controls.Add(printQRCodeButton);
+
+        qrCodePictureBox = new PictureBox
+        {
+            Location = new Point(10, 190),
+            Size = new Size(200, 200)
+        };
+        this.Controls.Add(qrCodePictureBox);
+    }
+
+    private void GenerateQRCodeButton_Click(object sender, EventArgs e)
+    {
+        string batchNumber = batchNumberTextBox.Text;
+        string productDescription = productDescriptionTextBox.Text;
+        string grade = gradeTextBox.Text;
+        string width = widthTextBox.Text;
+        string length = lengthTextBox.Text;
 
         string qrCodeValue = $"{batchNumber},{productDescription},{grade},{width},{length}";
 
         GenerateQRCode(qrCodeValue);
 
+        printQRCodeButton.Enabled = true;
+    }
+
+    private void PrintQRCodeButton_Click(object sender, EventArgs e)
+    {
         PrintQRCodeLabel();
     }
 
-    static void GenerateQRCode(string qrCodeValue)
+    private void GenerateQRCode(string qrCodeValue)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeValue, QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
         Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-        
+        qrCodePictureBox.Image = qrCodeImage;
+        qrCodePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+
         qrCodeImage.Save("qrcode.png");
     }
 
-    static void PrintQRCodeLabel()
+    private void PrintQRCodeLabel()
     {
-        
         Bitmap qrCodeImage = new Bitmap("qrcode.png");
 
         PrintDocument printDocument = new PrintDocument();
         printDocument.PrintPage += (sender, e) =>
         {
-            
             e.Graphics.DrawImage(qrCodeImage, 0, 0);
         };
 
-        
         printDocument.Print();
+    }
+
+    [STAThread]
+    static void Main()
+    {
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+        Application.Run(new QRCodeForm());
     }
 }
