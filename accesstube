@@ -1,0 +1,46 @@
+INSERT INTO [dbo].[PIMSUSER] 
+(
+    [EmployeeID],
+    [NewEmployeeID],
+    [TitleID],
+    [Password],
+    [FirstName],
+    [LastName],
+    [DOB],
+    [ProfilePic],
+    [Email],
+    [MobileNo],
+    [Active],
+    [RoleID],
+    [EmployeeTypeID],
+    [CreatedOn],
+    [CreatedBy],
+    [ModifiedOn],
+    [ModifiedBy],
+    [DeactivatedDate],
+    [ABPFill],
+    [DPRFill]
+)
+VALUES
+(
+    '921076',            -- EmployeeID
+    NULL,                -- NewEmployeeID (Assuming NULL as it's not provided)
+    NULL,                -- TitleID (Assuming NULL as it's not provided)
+    NULL,                -- Password (Assuming NULL as it's not provided)
+    'Atul',              -- FirstName
+    'Kumar',             -- LastName
+    NULL,                -- DOB (Assuming NULL as it's not provided)
+    NULL,                -- ProfilePic (Assuming NULL as it's not provided)
+    NULL,                -- Email (Assuming NULL as it's not provided)
+    '7984158141',        -- MobileNo
+    1,                   -- Active (Assuming 1 as Active status)
+    NULL,                -- RoleID (Assuming NULL as it's not provided)
+    NULL,                -- EmployeeTypeID (Assuming NULL as it's not provided)
+    GETDATE(),           -- CreatedOn (Current date and time)
+    NULL,                -- CreatedBy (Assuming NULL as it's not provided)
+    NULL,                -- ModifiedOn (Assuming NULL as it's not provided)
+    NULL,                -- ModifiedBy (Assuming NULL as it's not provided)
+    NULL,                -- DeactivatedDate (Assuming NULL as it's not provided)
+    NULL,                -- ABPFill (Assuming NULL as it's not provided)
+    NULL                 -- DPRFill (Assuming NULL as it's not provided)
+);
