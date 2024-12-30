@@ -1,133 +1,139 @@
-namespace WindowsFormsApp
+private void InitializeComponent()
 {
-    partial class Form1
+    this.SuspendLayout();
+
+    // Form Properties
+    this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+    this.ClientSize = new System.Drawing.Size(900, 600);
+    this.Text = "WIP Details";
+
+    // Title Label
+    var titleLabel = new System.Windows.Forms.Label
     {
-        private System.ComponentModel.IContainer components = null;
+        Text = "WIP Details",
+        Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Bold),
+        AutoSize = true,
+        Location = new System.Drawing.Point(370, 10)
+    };
+    this.Controls.Add(titleLabel);
 
-        protected override void Dispose(bool disposing)
+    // Company Details
+    var companyDetailsLabel = new System.Windows.Forms.Label
+    {
+        Text = "TATA BLUESCOPE STEEL PRIVATE LIMITED\nPPGL C Y550PL HPL3 0.50BMT (0.58TPT) X610",
+        Font = new System.Drawing.Font("Arial", 10F),
+        AutoSize = true,
+        Location = new System.Drawing.Point(270, 50)
+    };
+    this.Controls.Add(companyDetailsLabel);
+
+    // Fields Labels and Values
+    string[] fieldLabels = {
+        "Mother Batch", "Customer Grade", "Thickness", "Weight", "Width", "Date/Shift"
+    };
+    string[] fieldValues = {
+        "K4C1072100", "15.160 MT", "0.500 MM", "15.160 MT", "1235 MM", "22-DEC-24/B"
+    };
+
+    int xLabel = 50, yField = 100, xValue = 200;
+    for (int i = 0; i < fieldLabels.Length; i++)
+    {
+        var lbl = new System.Windows.Forms.Label
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+            Text = fieldLabels[i],
+            Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
+            AutoSize = true,
+            Location = new System.Drawing.Point(xLabel, yField)
+        };
+        this.Controls.Add(lbl);
 
-        private void InitializeComponent()
+        var valueLabel = new System.Windows.Forms.Label
         {
-            this.SuspendLayout();
+            Text = fieldValues[i],
+            Font = new System.Drawing.Font("Arial", 10F),
+            AutoSize = true,
+            Location = new System.Drawing.Point(xValue, yField)
+        };
+        this.Controls.Add(valueLabel);
 
-            // Form Properties
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 600);
-            this.Text = "WIP Details";
-
-            // Title Label
-            System.Windows.Forms.Label titleLabel = new System.Windows.Forms.Label();
-            titleLabel.Text = "WIP Details";
-            titleLabel.Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Bold);
-            titleLabel.AutoSize = true;
-            titleLabel.Location = new System.Drawing.Point(350, 20);
-            this.Controls.Add(titleLabel);
-
-            // Table Layout Panel
-            System.Windows.Forms.TableLayoutPanel tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            tableLayoutPanel.ColumnCount = 4;
-            tableLayoutPanel.RowCount = 6;
-            tableLayoutPanel.Size = new System.Drawing.Size(800, 300);
-            tableLayoutPanel.Location = new System.Drawing.Point(50, 70);
-            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-
-            // Adding Labels and Textboxes manually
-
-            // Row 1
-            AddLabel(tableLayoutPanel, "Customer Name", 0, 1);
-            AddTextBox(tableLayoutPanel, 1, 1);
-            AddLabel(tableLayoutPanel, "Mother Batch", 2, 1);
-            AddTextBox(tableLayoutPanel, 3, 1);
-
-            // Row 2
-            AddLabel(tableLayoutPanel, "Product Desc.", 0, 2);
-            AddTextBox(tableLayoutPanel, 1, 2);
-            AddLabel(tableLayoutPanel, "Customer Grade", 2, 2);
-            AddTextBox(tableLayoutPanel, 3, 2);
-
-            // Row 3
-            AddLabel(tableLayoutPanel, "Batch Number", 0, 3);
-            AddTextBox(tableLayoutPanel, 1, 3);
-            AddLabel(tableLayoutPanel, "Weight", 2, 3);
-            AddTextBox(tableLayoutPanel, 3, 3);
-
-            // Row 4
-            AddLabel(tableLayoutPanel, "Thickness", 0, 4);
-            AddTextBox(tableLayoutPanel, 1, 4);
-            AddLabel(tableLayoutPanel, "Date/Shift", 2, 4);
-            AddTextBox(tableLayoutPanel, 3, 4);
-
-            // Row 5
-            AddLabel(tableLayoutPanel, "Width", 0, 5);
-            AddTextBox(tableLayoutPanel, 1, 5);
-            AddLabel(tableLayoutPanel, "Surface Finish", 2, 5);
-            AddTextBox(tableLayoutPanel, 3, 5);
-
-            this.Controls.Add(tableLayoutPanel);
-
-            // QR Code Placeholder
-            System.Windows.Forms.PictureBox qrCodeBox = new System.Windows.Forms.PictureBox();
-            qrCodeBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            qrCodeBox.Size = new System.Drawing.Size(120, 120);
-            qrCodeBox.Location = new System.Drawing.Point(700, 400);
-            this.Controls.Add(qrCodeBox);
-
-            // Logo Placeholder
-            System.Windows.Forms.PictureBox logoBox = new System.Windows.Forms.PictureBox();
-            logoBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            logoBox.Size = new System.Drawing.Size(150, 50);
-            logoBox.Location = new System.Drawing.Point(700, 530);
-            this.Controls.Add(logoBox);
-
-            // Remarks Section
-            System.Windows.Forms.GroupBox remarksBox = new System.Windows.Forms.GroupBox();
-            remarksBox.Text = "Remarks";
-            remarksBox.Size = new System.Drawing.Size(600, 80);
-            remarksBox.Location = new System.Drawing.Point(50, 400);
-
-            System.Windows.Forms.Label processRouteLabel = new System.Windows.Forms.Label();
-            processRouteLabel.Text = "Process Route";
-            processRouteLabel.Location = new System.Drawing.Point(10, 30);
-            processRouteLabel.AutoSize = true;
-
-            System.Windows.Forms.TextBox processRouteBox = new System.Windows.Forms.TextBox();
-            processRouteBox.Size = new System.Drawing.Size(500, 25);
-            processRouteBox.Location = new System.Drawing.Point(120, 25);
-
-            remarksBox.Controls.Add(processRouteLabel);
-            remarksBox.Controls.Add(processRouteBox);
-            this.Controls.Add(remarksBox);
-
-            this.ResumeLayout(false);
-        }
-
-        // Helper Methods
-        private void AddLabel(System.Windows.Forms.TableLayoutPanel table, string text, int col, int row)
-        {
-            var label = new System.Windows.Forms.Label();
-            label.Text = text;
-            label.Font = new System.Drawing.Font("Arial", 10F);
-            label.AutoSize = true;
-            label.Dock = System.Windows.Forms.DockStyle.Fill;
-            table.Controls.Add(label, col, row);
-        }
-
-        private void AddTextBox(System.Windows.Forms.TableLayoutPanel table, int col, int row)
-        {
-            var textBox = new System.Windows.Forms.TextBox();
-            textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            table.Controls.Add(textBox, col, row);
-        }
+        yField += 40;
     }
+
+    // QR Code Box
+    var qrCodeBox = new System.Windows.Forms.PictureBox
+    {
+        BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+        Size = new System.Drawing.Size(120, 120),
+        Location = new System.Drawing.Point(650, 100)
+    };
+    this.Controls.Add(qrCodeBox);
+
+    // Logo Box
+    var logoBox = new System.Windows.Forms.PictureBox
+    {
+        BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+        Size = new System.Drawing.Size(150, 50),
+        Location = new System.Drawing.Point(650, 250)
+    };
+    this.Controls.Add(logoBox);
+
+    // IEO (for GP) GroupBox
+    var ieoBox = new System.Windows.Forms.GroupBox
+    {
+        Text = "IEO (for GP)",
+        Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
+        Size = new System.Drawing.Size(400, 80),
+        Location = new System.Drawing.Point(50, 350)
+    };
+    var noOfSheetsLabel = new System.Windows.Forms.Label { Text = "No of sheet", Location = new System.Drawing.Point(10, 30), AutoSize = true };
+    var noOfSheetsBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(100, 25), Size = new System.Drawing.Size(100, 25) };
+    var productTypeLabel = new System.Windows.Forms.Label { Text = "Product Type", Location = new System.Drawing.Point(220, 30), AutoSize = true };
+    var productTypeBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(310, 25), Size = new System.Drawing.Size(80, 25) };
+    ieoBox.Controls.Add(noOfSheetsLabel);
+    ieoBox.Controls.Add(noOfSheetsBox);
+    ieoBox.Controls.Add(productTypeLabel);
+    ieoBox.Controls.Add(productTypeBox);
+    this.Controls.Add(ieoBox);
+
+    // Previous Stage Remarks GroupBox
+    var remarksBox = new System.Windows.Forms.GroupBox
+    {
+        Text = "Previous Stage Remarks",
+        Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
+        Size = new System.Drawing.Size(400, 100),
+        Location = new System.Drawing.Point(50, 450)
+    };
+    var processRouteLabel = new System.Windows.Forms.Label { Text = "Process Route", Location = new System.Drawing.Point(10, 30), AutoSize = true };
+    var processRouteBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(120, 25), Size = new System.Drawing.Size(250, 25) };
+    remarksBox.Controls.Add(processRouteLabel);
+    remarksBox.Controls.Add(processRouteBox);
+    this.Controls.Add(remarksBox);
+
+    // Additional Fields
+    var additionalFieldLabels = new[] { "Next Workcenter", "Bottom Coat Color" };
+    var additionalFieldValues = new[] { "C-COLOR COATED", "7035/TSL-629B" };
+    yField = 500;
+    for (int i = 0; i < additionalFieldLabels.Length; i++)
+    {
+        var additionalLabel = new System.Windows.Forms.Label
+        {
+            Text = additionalFieldLabels[i],
+            Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
+            AutoSize = true,
+            Location = new System.Drawing.Point(500, yField)
+        };
+        var additionalValue = new System.Windows.Forms.Label
+        {
+            Text = additionalFieldValues[i],
+            Font = new System.Drawing.Font("Arial", 10F),
+            AutoSize = true,
+            Location = new System.Drawing.Point(650, yField)
+        };
+        this.Controls.Add(additionalLabel);
+        this.Controls.Add(additionalValue);
+        yField += 50;
+    }
+
+    this.ResumeLayout(false);
 }
