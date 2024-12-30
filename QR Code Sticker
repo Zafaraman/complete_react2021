@@ -1,16 +1,12 @@
+I'll help you create a form that matches the image exactly. Here's the modified code:
+
+```csharp
 namespace WIP_Sticker
 {
     partial class Form4
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,72 +16,185 @@ namespace WIP_Sticker
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            textBox1 = new TextBox();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel1.SuspendLayout();
-            SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.Location = new Point(4, 4);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 20);
-            button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(174, 4);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 1;
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Controls.Add(button1, 0, 0);
-            tableLayoutPanel1.Controls.Add(textBox1, 1, 0);
-            tableLayoutPanel1.Location = new Point(125, 124);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(362, 97);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // Form4
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(tableLayoutPanel1);
-            Name = "Form4";
-            Text = "Form4";
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            ResumeLayout(false);
+            this.mainTable = new TableLayoutPanel();
+            this.SuspendLayout();
+
+            // Main TableLayoutPanel
+            this.mainTable = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                ColumnCount = 3,
+                RowCount = 11,
+                Margin = new Padding(10),
+                BackColor = Color.White
+            };
+
+            // Title Row
+            Label titleLabel = new Label
+            {
+                Text = "WIP Details",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Font = new Font("Arial", 12, FontStyle.Bold)
+            };
+            mainTable.Controls.Add(titleLabel, 0, 0);
+            mainTable.SetColumnSpan(titleLabel, 3);
+
+            // Company Details
+            Label companyLabel = new Label
+            {
+                Text = "TATA BLUESCOPE STEEL PRIVATE LIMITE",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Font = new Font("Arial", 10)
+            };
+            mainTable.Controls.Add(companyLabel, 0, 1);
+            mainTable.SetColumnSpan(companyLabel, 3);
+
+            Label productLabel = new Label
+            {
+                Text = "PPGL C Y550PL HPL3 0.50BMT(0.58TPT)X610",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Font = new Font("Arial", 10)
+            };
+            mainTable.Controls.Add(productLabel, 0, 2);
+            mainTable.SetColumnSpan(productLabel, 3);
+
+            // Data rows
+            string[,] data = {
+                { "K4C1072100", "Mother Batch", "" },
+                { "0.500 MM", "Customer Grade", "" },
+                { "1235 MM", "Weight", "15.160 MT" },
+                { "", "Date/Shift", "22-DEC-24/B" }
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (!string.IsNullOrEmpty(data[i, j]))
+                    {
+                        Label label = new Label
+                        {
+                            Text = data[i, j],
+                            TextAlign = ContentAlignment.MiddleLeft,
+                            Dock = DockStyle.Fill,
+                            Font = new Font("Arial", 9)
+                        };
+                        mainTable.Controls.Add(label, j, i + 3);
+                    }
+                }
+            }
+
+            // IEO Box
+            GroupBox ieoBox = new GroupBox
+            {
+                Text = "IEO(for GP)",
+                Dock = DockStyle.Fill,
+                Font = new Font("Arial", 9)
+            };
+            TableLayoutPanel ieoTable = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 2
+            };
+            ieoTable.Controls.Add(new Label { Text = "of sheet", Dock = DockStyle.Fill }, 0, 0);
+            ieoTable.Controls.Add(new Label { Text = "duct Type", Dock = DockStyle.Fill }, 0, 1);
+            ieoTable.Controls.Add(new TextBox { Dock = DockStyle.Fill }, 1, 0);
+            ieoTable.Controls.Add(new TextBox { Dock = DockStyle.Fill }, 1, 1);
+            ieoBox.Controls.Add(ieoTable);
+            mainTable.Controls.Add(ieoBox, 0, 7);
+
+            // QR Code and Logo
+            PictureBox qrCode = new PictureBox
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+            mainTable.Controls.Add(qrCode, 1, 7);
+
+            PictureBox logo = new PictureBox
+            {
+                Image = null, // Add TATA STEEL logo here
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+            mainTable.Controls.Add(logo, 2, 7);
+
+            // Process Route
+            Label processRouteLabel = new Label { Text = "Process Route", Dock = DockStyle.Fill };
+            mainTable.Controls.Add(processRouteLabel, 0, 8);
+            Label processRouteValue = new Label { 
+                Text = "CCL CRS (P-M2-TR-QA-GL-QA-C-QA-R-QA-PACK)", 
+                Dock = DockStyle.Fill 
+            };
+            mainTable.Controls.Add(processRouteValue, 1, 8);
+            mainTable.SetColumnSpan(processRouteValue, 2);
+
+            // Bottom Rows
+            mainTable.Controls.Add(new Label { Text = "09-QA", Dock = DockStyle.Fill }, 0, 9);
+            mainTable.Controls.Add(new Label { Text = "Next Workcenter", Dock = DockStyle.Fill }, 1, 9);
+            mainTable.Controls.Add(new Label { Text = "C-COLOR COATED", Dock = DockStyle.Fill }, 2, 9);
+
+            mainTable.Controls.Add(new Label { Text = "ROYAL LIGHT BLUE TSL 245", Dock = DockStyle.Fill }, 0, 10);
+            mainTable.Controls.Add(new Label { Text = "Bottom Coat Color", Dock = DockStyle.Fill }, 1, 10);
+            mainTable.Controls.Add(new Label { Text = "7035/TSL-629B", Dock = DockStyle.Fill }, 2, 10);
+
+            // Set column and row styles
+            mainTable.ColumnStyles.Clear();
+            mainTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            mainTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+            mainTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+
+            for (int i = 0; i < mainTable.RowCount; i++)
+            {
+                mainTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            }
+
+            // Form properties
+            this.Controls.Add(mainTable);
+            this.Size = new Size(800, 600);
+            this.Text = "WIP Details";
+            this.ResumeLayout(false);
         }
 
-        #endregion
-
-        private Button button1;
-        private TextBox textBox1;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel mainTable;
     }
 }
+```
+
+And in your Form4.cs file:
+
+```csharp
+namespace WIP_Sticker
+{
+    public partial class Form4 : Form
+    {
+        public Form4()
+        {
+            InitializeComponent();
+        }
+    }
+}
+```
+
+This code will create a form that matches your image with:
+1. Proper table layout with borders
+2. All the text fields in the correct positions
+3. Spaces for QR code and logo
+4. IEO box with input fields
+5. Process route and bottom information
+
+Key features:
+- Uses TableLayoutPanel for consistent layout
+- Maintains proper spacing and borders
+- Includes all text exactly as shown
+- Preserves the structure of the original document
+
+Would you like me to explain any part of this implementation in more detail?
