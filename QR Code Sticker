@@ -1,163 +1,91 @@
-Based on the error message shown in the image, the issue is that you're trying to modify the designer-generated code manually. In Windows Forms, the `InitializeComponent` method is typically managed by the Visual Studio Forms Designer. Here's how you can fix this:
-
-1. First, create your form using the Forms Designer, then add your custom code in a separate method.
-
-Here's the modified approach:
-
-```csharp
-public partial class Form2 : Form
+namespace WIP_Sticker
 {
-    public Form2()
+    partial class Form4
     {
-        InitializeComponent(); // Let the designer handle basic initialization
-        SetupCustomControls(); // Call your custom setup method
-    }
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-    private void SetupCustomControls()
-    {
-        // Title Label
-        var titleLabel = new Label
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
         {
-            Text = "WIP Details",
-            Font = new Font("Arial", 16F, FontStyle.Bold),
-            AutoSize = true,
-            Location = new Point(370, 10)
-        };
-        this.Controls.Add(titleLabel);
-
-        // Company Details
-        var companyDetailsLabel = new Label
-        {
-            Text = "TATA BLUESCOPE STEEL PRIVATE LIMITED\nPPGL C Y550PL HPL3 0.50BMT (0.58TPT) X610",
-            Font = new Font("Arial", 10F),
-            AutoSize = true,
-            Location = new Point(270, 50)
-        };
-        this.Controls.Add(companyDetailsLabel);
-
-        // Fields Labels and Values
-        string[] fieldLabels = {
-            "Mother Batch", "Customer Grade", "Thickness", "Weight", "Width", "Date/Shift"
-        };
-        string[] fieldValues = {
-            "K4C1072100", "15.160 MT", "0.500 MM", "15.160 MT", "1235 MM", "22-DEC-24/B"
-        };
-
-        int xLabel = 50, yField = 100, xValue = 200;
-        for (int i = 0; i < fieldLabels.Length; i++)
-        {
-            var lbl = new Label
+            if (disposing && (components != null))
             {
-                Text = fieldLabels[i],
-                Font = new Font("Arial", 10F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(xLabel, yField)
-            };
-            this.Controls.Add(lbl);
-
-            var valueLabel = new Label
-            {
-                Text = fieldValues[i],
-                Font = new Font("Arial", 10F),
-                AutoSize = true,
-                Location = new Point(xValue, yField)
-            };
-            this.Controls.Add(valueLabel);
-
-            yField += 40;
+                components.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
-        // QR Code Box
-        var qrCodeBox = new PictureBox
-        {
-            BorderStyle = BorderStyle.FixedSingle,
-            Size = new Size(120, 120),
-            Location = new Point(650, 100)
-        };
-        this.Controls.Add(qrCodeBox);
+        #region Windows Form Designer generated code
 
-        // Logo Box
-        var logoBox = new PictureBox
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
         {
-            BorderStyle = BorderStyle.FixedSingle,
-            Size = new Size(150, 50),
-            Location = new Point(650, 250)
-        };
-        this.Controls.Add(logoBox);
-
-        // IEO (for GP) GroupBox
-        var ieoBox = new GroupBox
-        {
-            Text = "IEO (for GP)",
-            Font = new Font("Arial", 10F, FontStyle.Bold),
-            Size = new Size(400, 80),
-            Location = new Point(50, 350)
-        };
-        var noOfSheetsLabel = new Label { Text = "No of sheet", Location = new Point(10, 30), AutoSize = true };
-        var noOfSheetsBox = new TextBox { Location = new Point(100, 25), Size = new Size(100, 25) };
-        var productTypeLabel = new Label { Text = "Product Type", Location = new Point(220, 30), AutoSize = true };
-        var productTypeBox = new TextBox { Location = new Point(310, 25), Size = new Size(80, 25) };
-        ieoBox.Controls.Add(noOfSheetsLabel);
-        ieoBox.Controls.Add(noOfSheetsBox);
-        ieoBox.Controls.Add(productTypeLabel);
-        ieoBox.Controls.Add(productTypeBox);
-        this.Controls.Add(ieoBox);
-
-        // Previous Stage Remarks GroupBox
-        var remarksBox = new GroupBox
-        {
-            Text = "Previous Stage Remarks",
-            Font = new Font("Arial", 10F, FontStyle.Bold),
-            Size = new Size(400, 100),
-            Location = new Point(50, 450)
-        };
-        var processRouteLabel = new Label { Text = "Process Route", Location = new Point(10, 30), AutoSize = true };
-        var processRouteBox = new TextBox { Location = new Point(120, 25), Size = new Size(250, 25) };
-        remarksBox.Controls.Add(processRouteLabel);
-        remarksBox.Controls.Add(processRouteBox);
-        this.Controls.Add(remarksBox);
-
-        // Additional Fields
-        var additionalFieldLabels = new[] { "Next Workcenter", "Bottom Coat Color" };
-        var additionalFieldValues = new[] { "C-COLOR COATED", "7035/TSL-629B" };
-        yField = 500;
-        for (int i = 0; i < additionalFieldLabels.Length; i++)
-        {
-            var additionalLabel = new Label
-            {
-                Text = additionalFieldLabels[i],
-                Font = new Font("Arial", 10F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(500, yField)
-            };
-            var additionalValue = new Label
-            {
-                Text = additionalFieldValues[i],
-                Font = new Font("Arial", 10F),
-                AutoSize = true,
-                Location = new Point(650, yField)
-            };
-            this.Controls.Add(additionalLabel);
-            this.Controls.Add(additionalValue);
-            yField += 50;
+            button1 = new Button();
+            textBox1 = new TextBox();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            tableLayoutPanel1.SuspendLayout();
+            SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.Location = new Point(4, 4);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 20);
+            button1.TabIndex = 0;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(174, 4);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(100, 23);
+            textBox1.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Controls.Add(button1, 0, 0);
+            tableLayoutPanel1.Controls.Add(textBox1, 1, 0);
+            tableLayoutPanel1.Location = new Point(125, 124);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 4;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(362, 97);
+            tableLayoutPanel1.TabIndex = 2;
+            // 
+            // Form4
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(tableLayoutPanel1);
+            Name = "Form4";
+            Text = "Form4";
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            ResumeLayout(false);
         }
 
-        // Set form properties
-        this.ClientSize = new Size(900, 600);
-        this.Text = "WIP Details";
+        #endregion
+
+        private Button button1;
+        private TextBox textBox1;
+        private TableLayoutPanel tableLayoutPanel1;
     }
 }
-```
-
-Key changes made:
-1. Moved the code from `InitializeComponent` to a new method called `SetupCustomControls`
-2. Simplified the namespace references (removed redundant System.Windows.Forms prefixes)
-3. Call `SetupCustomControls` after `InitializeComponent` in the constructor
-4. Let Visual Studio manage the designer-generated code in the separate designer file
-
-To use this:
-1. Create a new Windows Form in Visual Studio
-2. Copy this code into your form's code-behind file (Form2.cs)
-3. Let Visual Studio manage the InitializeComponent method in the designer file (Form2.Designer.cs)
-
-This approach separates the designer-generated code from your custom control creation, which should resolve the error you're seeing.
