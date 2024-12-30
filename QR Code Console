@@ -1,226 +1,47 @@
 using System;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.Windows.Forms;
-using ZXing;
-using ZXing.QrCode;
-using ZXing.Windows.Compatibility;
+using QRCoder;
 
-namespace QRCodeGenerator
+namespace QRCodeGeneratorApp
 {
-    public partial class QRCodeForm : Form
+    public partial class MainForm : Form
     {
-        private Bitmap qrCodeImage;
-
-        public QRCodeForm()
+        public MainForm()
         {
             InitializeComponent();
-            SetupFormLabels();
         }
 
-        private void SetupFormLabels()
+        private void btnGenerateQR_Click(object sender, EventArgs e)
         {
-            // Add labels for each text box
-            Label batchNumberLabel = new Label
+            // Collect details from TextBoxes
+            string customerName = txtCustomerName.Text;
+            string productDesc = txtProductDesc.Text;
+            string batchNumber = txtBatchNumber.Text;
+            string thickness = txtThickness.Text;
+            string width = txtWidth.Text;
+            string surfaceFinish = txtSurfaceFinish.Text;
+            string dateShift = txtDateShift.Text;
+
+            // Concatenate data into a single string for the QR code
+            string qrData = $"Customer Name: {customerName}\n" +
+                            $"Product Desc: {productDesc}\n" +
+                            $"Batch Number: {batchNumber}\n" +
+                            $"Thickness: {thickness}\n" +
+                            $"Width: {width}\n" +
+                            $"Surface Finish: {surfaceFinish}\n" +
+                            $"Date/Shift: {dateShift}";
+
+            // Generate the QR code
+            using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
-                Location = new Point(220, 13),
-                Size = new Size(100, 13),
-                Text = "Batch Number"
-            };
-
-            Label productDescriptionLabel = new Label
-            {
-                Location = new Point(220, 43),
-                Size = new Size(150, 13),
-                Text = "Product Description"
-            };
-
-            Label gradeLabel = new Label
-            {
-                Location = new Point(220, 73),
-                Size = new Size(100, 13),
-                Text = "Grade"
-            };
-
-            Label widthLabel = new Label
-            {
-                Location = new Point(220, 103),
-                Size = new Size(100, 13),
-                Text = "Width"
-            };
-
-            Label lengthLabel = new Label
-            {
-                Location = new Point(220, 133),
-                Size = new Size(100, 13),
-                Text = "Length"
-            };
-
-            Controls.AddRange(new Control[] 
-            { 
-                batchNumberLabel, 
-                productDescriptionLabel, 
-                gradeLabel, 
-                widthLabel, 
-                lengthLabel 
-            });
-        }
-
-        private void GenerateQRCodeButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Combine all the information into a single string
-                string qrCodeData = $"Batch: {batchNumberTextBox.Text}\n" +
-                                  $"Product: {productDescriptionTextBox.Text}\n" +
-                                  $"Grade: {gradeTextBox.Text}\n" +
-                                  $"Width: {widthTextBox.Text}\n" +
-                                  $"Length: {lengthTextBox.Text}";
-
-                var writer = new BarcodeWriter
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrData, QRCodeGenerator.ECCLevel.Q);
+                using (QRCode qrCode = new QRCode(qrCodeData))
                 {
-                    Format = BarcodeFormat.QR_CODE,
-                    Options = new QrCodeEncodingOptions
-                    {
-                        Height = 200,
-                        Width = 200,
-                        Margin = 1
-                    }
-                };
-
-                qrCodeImage = writer.Write(qrCodeData);
-                qrCodePictureBox.Image = qrCodeImage;
-                qrCodePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-                printQRCodeButton.Enabled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error generating QR code: {ex.Message}", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void PrintQRCodeButton_Click(object sender, EventArgs e)
-        {
-            if (qrCodeImage == null)
-            {
-                MessageBox.Show("Please generate a QR code first.", "Warning", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                PrintDocument pd = new PrintDocument();
-                pd.PrintPage += PrintPage;
-
-                PrintDialog printDialog = new PrintDialog();
-                printDialog.Document = pd;
-
-                if (printDialog.ShowDialog() == DialogResult.OK)
-                {
-                    pd.Print();
+                    Bitmap qrCodeImage = qrCode.GetGraphic(20);
+                    picQRCode.Image = qrCodeImage;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error printing QR code: {ex.Message}", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void PrintPage(object sender, PrintPageEventArgs e)
-        {
-            if (qrCodeImage != null)
-            {
-                Rectangle m = e.MarginBounds;
-                if ((double)qrCodeImage.Width / (double)qrCodeImage.Height > (double)m.Width / (double)m.Height)
-                {
-                    m.Height = (int)((double)qrCodeImage.Height / (double)qrCodeImage.Width * (double)m.Width);
-                }
-                else
-                {
-                    m.Width = (int)((double)qrCodeImage.Width / (double)qrCodeImage.Height * (double)m.Height);
-                }
-                e.Graphics.DrawImage(qrCodeImage, m);
-            }
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            if (qrCodeImage != null)
-            {
-                qrCodeImage.Dispose();
-            }
-            base.OnFormClosing(e);
-        }
-
-        partial class QRCodeForm
-        {
-            /// <summary>
-            /// Required designer variable.
-            /// </summary>
-            private System.ComponentModel.IContainer components = null;
-
-            /// <summary>
-            /// Clean up any resources being used.
-            /// </summary>
-            /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-            protected override void Dispose(bool disposing)
-            {
-                if (disposing && (components != null))
-                {
-                    components.Dispose();
-                }
-                base.Dispose(disposing);
-            }
-
-            #region Windows Form Designer generated code
-
-            /// <summary>
-            /// Required method for Designer support - do not modify
-            /// the contents of this method with the code editor.
-            /// </summary>
-            private void InitializeComponent()
-            {
-                this.batchNumberTextBox = new System.Windows.Forms.TextBox();
-                this.productDescriptionTextBox = new System.Windows.Forms.TextBox();
-                this.gradeTextBox = new System.Windows.Forms.TextBox();
-                this.widthTextBox = new System.Windows.Forms.TextBox();
-                this.lengthTextBox = new System.Windows.Forms.TextBox();
-                this.generateQRCodeButton = new System.Windows.Forms.Button();
-                this.printQRCodeButton = new System.Windows.Forms.Button();
-                this.qrCodePictureBox = new System.Windows.Forms.PictureBox();
-                ((System.ComponentModel.ISupportInitialize)(this.qrCodePictureBox)).BeginInit();
-                this.SuspendLayout();
-                // 
-                // Form controls initialization (as in your original code)
-                // 
-                this.Controls.Add(this.batchNumberTextBox);
-                this.Controls.Add(this.productDescriptionTextBox);
-                this.Controls.Add(this.gradeTextBox);
-                this.Controls.Add(this.widthTextBox);
-                this.Controls.Add(this.lengthTextBox);
-                this.Controls.Add(this.generateQRCodeButton);
-                this.Controls.Add(this.printQRCodeButton);
-                this.Controls.Add(this.qrCodePictureBox);
-                this.Name = "QRCodeForm";
-                this.Text = "QR Code Generator";
-                ((System.ComponentModel.ISupportInitialize)(this.qrCodePictureBox)).EndInit();
-                this.ResumeLayout(false);
-                this.PerformLayout();
-            }
-
-            #endregion
-
-            private System.Windows.Forms.TextBox batchNumberTextBox;
-            private System.Windows.Forms.TextBox productDescriptionTextBox;
-            private System.Windows.Forms.TextBox gradeTextBox;
-            private System.Windows.Forms.TextBox widthTextBox;
-            private System.Windows.Forms.TextBox lengthTextBox;
-            private System.Windows.Forms.Button generateQRCodeButton;
-            private System.Windows.Forms.Button printQRCodeButton;
-            private System.Windows.Forms.PictureBox qrCodePictureBox;
         }
     }
 }
