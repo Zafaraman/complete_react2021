@@ -1,16 +1,16 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using ZXing;
-using ZXing.QrCode;
-using ZXing.Windows.Compatibility;
-
-namespace WIP_Sticker
+namespace QRCodeGenerator
 {
-    partial class Form5
+    partial class QRCodeForm
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,93 +20,96 @@ namespace WIP_Sticker
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
-            // Keep your existing InitializeComponent code here
-            // Just modify pictureBox1 to hold the QR code
-            pictureBox1 = new PictureBox
-            {
-                Location = new Point(337, 4),
-                Name = "pictureBox1",
-                Size = new Size(141, 115),
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                TabIndex = 0,
-                TabStop = false
-            };
-
-            // Add load event handler
-            this.Load += Form5_Load;
-        }
-
-        private void Form5_Load(object sender, EventArgs e)
-        {
-            GenerateQRCode();
-        }
-
-        private void GenerateQRCode()
-        {
-            try
-            {
-                // Create the QR code content from form data
-                string qrContent = $"Customer: {lblCustName.Text}\n" +
-                                 $"Product: {label3.Text}\n" +
-                                 $"Batch: {label5.Text}\n" +
-                                 $"Thickness: {label8.Text}\n" +
-                                 $"Width: {label13.Text}\n" +
-                                 $"Weight: {label11.Text}\n" +
-                                 $"Date/Shift: {label17.Text}";
-
-                var writer = new BarcodeWriter
-                {
-                    Format = BarcodeFormat.QR_CODE,
-                    Options = new QrCodeEncodingOptions
-                    {
-                        Height = 115,
-                        Width = 141,
-                        Margin = 1
-                    }
-                };
-
-                using (var qrCode = writer.Write(qrContent))
-                {
-                    pictureBox1.Image = new Bitmap(qrCode);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error generating QR code: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Your existing control declarations
-        private Label lblHeading;
-        private Label lblCustName;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Label label3;
-        private Label label1;
-        private Label label2;
-        private TableLayoutPanel tableLayoutPanel2;
-        private Label label4;
-        private Label label5;
-        private Label label6;
-        private Label label7;
-        private Label label8;
-        private Label label9;
-        private Label label10;
-        private Label label12;
-        private Label label13;
-        private Label label14;
-        private Label label15;
-        private Label label11;
-        private Label label17;
-        private TableLayoutPanel tableLayoutPanel3;
-        private PictureBox pictureBox1;
-        private PictureBox pictureBox2;
-        private TableLayoutPanel tableLayoutPanel4;
-        private TableLayoutPanel tableLayoutPanel5;
-        private Label label16;
-        private Label label18;
-        private Label label19;
-    }
-}
+            this.batchNumberTextBox = new System.Windows.Forms.TextBox();
+            this.productDescriptionTextBox = new System.Windows.Forms.TextBox();
+            this.gradeTextBox = new System.Windows.Forms.TextBox();
+            this.widthTextBox = new System.Windows.Forms.TextBox();
+            this.lengthTextBox = new System.Windows.Forms.TextBox();
+            this.generateQRCodeButton = new System.Windows.Forms.Button();
+            this.printQRCodeButton = new System.Windows.Forms.Button();
+            this.qrCodePictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.qrCodePictureBox)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // batchNumberTextBox
+            // 
+            this.batchNumberTextBox.Location = new System.Drawing.Point(10, 10);
+            this.batchNumberTextBox.Name = "batchNumberTextBox";
+            this.batchNumberTextBox.Size = new System.Drawing.Size(200, 20);
+            this.batchNumberTextBox.TabIndex = 0;
+            // 
+            // productDescriptionTextBox
+            // 
+            this.productDescriptionTextBox.Location = new System.Drawing.Point(10, 40);
+            this.productDescriptionTextBox.Name = "productDescriptionTextBox";
+            this.productDescriptionTextBox.Size = new System.Drawing.Size(200, 20);
+            this.productDescriptionTextBox.TabIndex = 1;
+            // 
+            // gradeTextBox
+            // 
+            this.gradeTextBox.Location = new System.Drawing.Point(10, 70);
+            this.gradeTextBox.Name = "gradeTextBox";
+            this.gradeTextBox.Size = new System.Drawing.Size(200, 20);
+            this.gradeTextBox.TabIndex = 2;
+            // 
+            // widthTextBox
+            // 
+            this.widthTextBox.Location = new System.Drawing.Point(10, 100);
+            this.widthTextBox.Name = "widthTextBox";
+            this.widthTextBox.Size = new System.Drawing.Size(200, 20);
+            this.widthTextBox.TabIndex = 3;
+            // 
+            // lengthTextBox
+            // 
+            this.lengthTextBox.Location = new System.Drawing.Point(10, 130);
+            this.lengthTextBox.Name = "lengthTextBox";
+            this.lengthTextBox.Size = new System.Drawing.Size(200, 20);
+            this.lengthTextBox.TabIndex = 4;
+            // 
+            // generateQRCodeButton
+            // 
+            this.generateQRCodeButton.Location = new System.Drawing.Point(10, 160);
+            this.generateQRCodeButton.Name = "generateQRCodeButton";
+            this.generateQRCodeButton.Size = new System.Drawing.Size(100, 20);
+            this.generateQRCodeButton.TabIndex = 5;
+            this.generateQRCodeButton.Text = "Generate QR Code";
+            this.generateQRCodeButton.UseVisualStyleBackColor = true;
+            this.generateQRCodeButton.Click += new System.EventHandler(this.GenerateQRCodeButton_Click);
+            // 
+            // printQRCodeButton
+            // 
+            this.printQRCodeButton.Location = new System.Drawing.Point(120, 160);
+            this.printQRCodeButton.Name = "printQRCodeButton";
+            this.printQRCodeButton.Size = new System.Drawing.Size(100, 20);
+            this.printQRCodeButton.TabIndex = 6;
+            this.printQRCodeButton.Text = "Print QR Code";
+            this.printQRCodeButton.UseVisualStyleBackColor = true;
+            this.printQRCodeButton.Click += new System.EventHandler(this.PrintQRCodeButton_Click);
+            // 
+            // qrCodePictureBox
+            // 
+            this.qrCodePictureBox.Location = new System.Drawing.Point(10, 190);
+            this.qrCodePictureBox.Name = "qrCodePictureBox";
+            this.qrCodePictureBox.Size = new System.Drawing.Size(200, 200);
+            this.qrCodePictureBox.TabIndex = 7;
+            this.qrCodePictureBox.TabStop = false;
+            // 
+            // QRCodeForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(384, 402);
+            this.Controls.Add(this.qrCodePictureBox);
+            this.Controls.Add(this.printQRCodeButton);
+            this.Controls.Add(this.generateQRCodeButton);
+            this.Controls.Add(this.lengthTextBox);
+            this.Controls.Add(this.widthTextBox);
+            this
