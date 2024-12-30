@@ -1,44 +1,60 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Drawing.Printing;
+using System.IO;
 using QRCoder;
 
-namespace WIP_Sticker
+class Program
 {
-    public partial class Form5 : Form
+    static void Main(string[] args)
     {
-        public Form5()
+        Console.WriteLine("Enter the batch number:");
+        string batchNumber = Console.ReadLine();
+
+        Console.WriteLine("Enter the product description:");
+        string productDescription = Console.ReadLine();
+
+        Console.WriteLine("Enter the grade:");
+        string grade = Console.ReadLine();
+
+        Console.WriteLine("Enter the width:");
+        string width = Console.ReadLine();
+
+        Console.WriteLine("Enter the length:");
+        string length = Console.ReadLine();
+
+        string qrCodeValue = $"{batchNumber},{productDescription},{grade},{width},{length}";
+
+        GenerateQRCode(qrCodeValue);
+
+        PrintQRCodeLabel();
+    }
+
+    static void GenerateQRCode(string qrCodeValue)
+    {
+        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeValue, QRCodeGenerator.ECCLevel.Q);
+        QRCode qrCode = new QRCode(qrCodeData);
+        Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+        
+        qrCodeImage.Save("qrcode.png");
+    }
+
+    static void PrintQRCodeLabel()
+    {
+        
+        Bitmap qrCodeImage = new Bitmap("qrcode.png");
+
+        PrintDocument printDocument = new PrintDocument();
+        printDocument.PrintPage += (sender, e) =>
         {
-            InitializeComponent();
-        }
+            
+            e.Graphics.DrawImage(qrCodeImage, 0, 0);
+        };
 
-        private void Form5_Load(object sender, EventArgs e)
-        {
-            GenerateQRCode();
-        }
-
-        private void GenerateQRCode()
-        {
-            string data = $"Customer Name: {lblCustName.Text}\n" +
-                            $"Product Description: {label3.Text}\n" +
-                            $"Batch Number: {label5.Text}\n" +
-                            $"Thickness: {label8.Text}\n" +
-                            $"Width: {label13.Text}\n" +
-                            $"Weight: {label11.Text}\n" +
-                            $"Date/Shift: {label17.Text}";
-
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(20);
-
-            PictureBox pictureBox = new PictureBox();
-            pictureBox.Image = qrCodeImage;
-            pictureBox.Location = new Point(451, 4);
-            pictureBox.Name = "pictureBox3";
-            pictureBox.Size = new Size(197, 115);
-            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            tableLayoutPanel3.Controls.Add(pictureBox);
-        }
+        
+        printDocument.Print();
     }
 }
