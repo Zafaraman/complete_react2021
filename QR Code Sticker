@@ -1,122 +1,105 @@
-using System;
-using System.Windows.Forms;
-
 namespace WindowsFormsApp
 {
-    public partial class Form1 : Form
+    partial class Form1
     {
-        public Form1()
+        private System.ComponentModel.IContainer components = null;
+
+        protected override void Dispose(bool disposing)
         {
-            InitializeComponent();
-            CreateFormLayout();
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
-        private void CreateFormLayout()
+        private void InitializeComponent()
         {
-            // Set Form Properties
-            this.Text = "WIP Details";
-            this.Size = new System.Drawing.Size(900, 600);
+            this.SuspendLayout();
 
-            // Add Title Label
-            Label titleLabel = new Label
-            {
-                Text = "WIP Details",
-                Font = new System.Drawing.Font("Arial", 16, System.Drawing.FontStyle.Bold),
-                AutoSize = true,
-                Location = new System.Drawing.Point(350, 20)
-            };
+            // Form Properties
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(900, 600);
+            this.Text = "WIP Details";
+
+            // Title Label
+            System.Windows.Forms.Label titleLabel = new System.Windows.Forms.Label();
+            titleLabel.Text = "WIP Details";
+            titleLabel.Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Bold);
+            titleLabel.AutoSize = true;
+            titleLabel.Location = new System.Drawing.Point(350, 20);
             this.Controls.Add(titleLabel);
 
-            // Section Labels and TextBoxes
-            string[] labels = { "Customer Name", "Product Desc.", "Batch Number", "Thickness", "Width", "Surface finish",
-                                "Mother Batch", "Customer Grade", "Weight", "Date/Shift" };
+            // Fields Labels and Textboxes
+            string[] fieldLabels = { "Customer Name", "Product Desc.", "Batch Number", "Thickness", "Width", "Surface finish",
+                                      "Mother Batch", "Customer Grade", "Weight", "Date/Shift" };
             int x1 = 50, y = 70, x2 = 400;
-
-            foreach (string label in labels)
+            for (int i = 0; i < fieldLabels.Length; i++)
             {
-                Label lbl = new Label
-                {
-                    Text = label,
-                    Font = new System.Drawing.Font("Arial", 10),
-                    AutoSize = true,
-                    Location = new System.Drawing.Point(x1, y)
-                };
+                var lbl = new System.Windows.Forms.Label();
+                lbl.Text = fieldLabels[i];
+                lbl.Font = new System.Drawing.Font("Arial", 10F);
+                lbl.AutoSize = true;
+                lbl.Location = new System.Drawing.Point(i < 5 ? x1 : x2, y);
                 this.Controls.Add(lbl);
 
-                TextBox txtBox = new TextBox
-                {
-                    Size = new System.Drawing.Size(200, 25),
-                    Location = new System.Drawing.Point(x1 + 150, y - 3)
-                };
+                var txtBox = new System.Windows.Forms.TextBox();
+                txtBox.Size = new System.Drawing.Size(200, 25);
+                txtBox.Location = new System.Drawing.Point((i < 5 ? x1 + 150 : x2 + 150), y - 3);
                 this.Controls.Add(txtBox);
 
-                if (labels.Length / 2 <= Array.IndexOf(labels, label))
-                {
-                    lbl.Location = new System.Drawing.Point(x2, y);
-                    txtBox.Location = new System.Drawing.Point(x2 + 150, y - 3);
-                }
-                y += 40;
+                if (i == 4) y = 70;
+                else y += 40;
             }
 
-            // Add QR Code Placeholder
-            PictureBox qrCodeBox = new PictureBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                Size = new System.Drawing.Size(120, 120),
-                Location = new System.Drawing.Point(650, 100)
-            };
+            // QR Code Placeholder
+            System.Windows.Forms.PictureBox qrCodeBox = new System.Windows.Forms.PictureBox();
+            qrCodeBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            qrCodeBox.Size = new System.Drawing.Size(120, 120);
+            qrCodeBox.Location = new System.Drawing.Point(650, 100);
             this.Controls.Add(qrCodeBox);
 
-            // Add Logo Placeholder
-            PictureBox logoBox = new PictureBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                Size = new System.Drawing.Size(150, 50),
-                Location = new System.Drawing.Point(650, 250)
-            };
+            // Logo Placeholder
+            System.Windows.Forms.PictureBox logoBox = new System.Windows.Forms.PictureBox();
+            logoBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            logoBox.Size = new System.Drawing.Size(150, 50);
+            logoBox.Location = new System.Drawing.Point(650, 250);
             this.Controls.Add(logoBox);
 
-            // Add Group Box for "IEO (for GP)"
-            GroupBox ieoBox = new GroupBox
-            {
-                Text = "IEO (for GP)",
-                Size = new System.Drawing.Size(400, 80),
-                Location = new System.Drawing.Point(50, 320)
-            };
-            Label noOfSheetsLabel = new Label { Text = "No of sheet", Location = new System.Drawing.Point(10, 30), AutoSize = true };
-            TextBox noOfSheetsBox = new TextBox { Location = new System.Drawing.Point(100, 25), Size = new System.Drawing.Size(100, 25) };
-            Label productTypeLabel = new Label { Text = "Product Type", Location = new System.Drawing.Point(220, 30), AutoSize = true };
-            TextBox productTypeBox = new TextBox { Location = new System.Drawing.Point(310, 25), Size = new System.Drawing.Size(80, 25) };
-
+            // IEO (for GP) GroupBox
+            System.Windows.Forms.GroupBox ieoBox = new System.Windows.Forms.GroupBox();
+            ieoBox.Text = "IEO (for GP)";
+            ieoBox.Size = new System.Drawing.Size(400, 80);
+            ieoBox.Location = new System.Drawing.Point(50, 320);
+            var noOfSheetsLabel = new System.Windows.Forms.Label { Text = "No of sheet", Location = new System.Drawing.Point(10, 30), AutoSize = true };
+            var noOfSheetsBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(100, 25), Size = new System.Drawing.Size(100, 25) };
+            var productTypeLabel = new System.Windows.Forms.Label { Text = "Product Type", Location = new System.Drawing.Point(220, 30), AutoSize = true };
+            var productTypeBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(310, 25), Size = new System.Drawing.Size(80, 25) };
             ieoBox.Controls.Add(noOfSheetsLabel);
             ieoBox.Controls.Add(noOfSheetsBox);
             ieoBox.Controls.Add(productTypeLabel);
             ieoBox.Controls.Add(productTypeBox);
             this.Controls.Add(ieoBox);
 
-            // Add Group Box for "Previous Stage Remarks"
-            GroupBox remarksBox = new GroupBox
-            {
-                Text = "Previous Stage Remarks",
-                Size = new System.Drawing.Size(400, 100),
-                Location = new System.Drawing.Point(50, 420)
-            };
-            Label processRouteLabel = new Label { Text = "Process Route", Location = new System.Drawing.Point(10, 30), AutoSize = true };
-            TextBox processRouteBox = new TextBox { Location = new System.Drawing.Point(120, 25), Size = new System.Drawing.Size(250, 25) };
-
+            // Previous Stage Remarks GroupBox
+            System.Windows.Forms.GroupBox remarksBox = new System.Windows.Forms.GroupBox();
+            remarksBox.Text = "Previous Stage Remarks";
+            remarksBox.Size = new System.Drawing.Size(400, 100);
+            remarksBox.Location = new System.Drawing.Point(50, 420);
+            var processRouteLabel = new System.Windows.Forms.Label { Text = "Process Route", Location = new System.Drawing.Point(10, 30), AutoSize = true };
+            var processRouteBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(120, 25), Size = new System.Drawing.Size(250, 25) };
             remarksBox.Controls.Add(processRouteLabel);
             remarksBox.Controls.Add(processRouteBox);
             this.Controls.Add(remarksBox);
 
-            // Add Current Workcenter and Color Fields
-            Label currentWorkcenterLabel = new Label { Text = "Current Workcenter", Location = new System.Drawing.Point(500, 350), AutoSize = true };
-            TextBox currentWorkcenterBox = new TextBox { Location = new System.Drawing.Point(650, 345), Size = new System.Drawing.Size(150, 25) };
-
-            Label topCoatColorLabel = new Label { Text = "Top Coat Color", Location = new System.Drawing.Point(500, 400), AutoSize = true };
-            TextBox topCoatColorBox = new TextBox { Location = new System.Drawing.Point(650, 395), Size = new System.Drawing.Size(150, 25) };
-
-            Label bottomCoatColorLabel = new Label { Text = "Bottom Coat Color", Location = new System.Drawing.Point(500, 450), AutoSize = true };
-            TextBox bottomCoatColorBox = new TextBox { Location = new System.Drawing.Point(650, 445), Size = new System.Drawing.Size(150, 25) };
+            // Current Workcenter Fields
+            var currentWorkcenterLabel = new System.Windows.Forms.Label { Text = "Current Workcenter", Location = new System.Drawing.Point(500, 350), AutoSize = true };
+            var currentWorkcenterBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(650, 345), Size = new System.Drawing.Size(150, 25) };
+            var topCoatColorLabel = new System.Windows.Forms.Label { Text = "Top Coat Color", Location = new System.Drawing.Point(500, 400), AutoSize = true };
+            var topCoatColorBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(650, 395), Size = new System.Drawing.Size(150, 25) };
+            var bottomCoatColorLabel = new System.Windows.Forms.Label { Text = "Bottom Coat Color", Location = new System.Drawing.Point(500, 450), AutoSize = true };
+            var bottomCoatColorBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(650, 445), Size = new System.Drawing.Size(150, 25) };
 
             this.Controls.Add(currentWorkcenterLabel);
             this.Controls.Add(currentWorkcenterBox);
@@ -124,6 +107,8 @@ namespace WindowsFormsApp
             this.Controls.Add(topCoatColorBox);
             this.Controls.Add(bottomCoatColorLabel);
             this.Controls.Add(bottomCoatColorBox);
+
+            this.ResumeLayout(false);
         }
     }
 }
