@@ -1,139 +1,172 @@
-private void InitializeComponent()
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using ZXing; // Install ZXing.Net NuGet package
+
+public class WipDetailsForm : Form
 {
-    this.SuspendLayout();
-
-    // Form Properties
-    this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-    this.ClientSize = new System.Drawing.Size(900, 600);
-    this.Text = "WIP Details";
-
-    // Title Label
-    var titleLabel = new System.Windows.Forms.Label
+    public WipDetailsForm()
     {
-        Text = "WIP Details",
-        Font = new System.Drawing.Font("Arial", 16F, System.Drawing.FontStyle.Bold),
-        AutoSize = true,
-        Location = new System.Drawing.Point(370, 10)
-    };
-    this.Controls.Add(titleLabel);
-
-    // Company Details
-    var companyDetailsLabel = new System.Windows.Forms.Label
-    {
-        Text = "TATA BLUESCOPE STEEL PRIVATE LIMITED\nPPGL C Y550PL HPL3 0.50BMT (0.58TPT) X610",
-        Font = new System.Drawing.Font("Arial", 10F),
-        AutoSize = true,
-        Location = new System.Drawing.Point(270, 50)
-    };
-    this.Controls.Add(companyDetailsLabel);
-
-    // Fields Labels and Values
-    string[] fieldLabels = {
-        "Mother Batch", "Customer Grade", "Thickness", "Weight", "Width", "Date/Shift"
-    };
-    string[] fieldValues = {
-        "K4C1072100", "15.160 MT", "0.500 MM", "15.160 MT", "1235 MM", "22-DEC-24/B"
-    };
-
-    int xLabel = 50, yField = 100, xValue = 200;
-    for (int i = 0; i < fieldLabels.Length; i++)
-    {
-        var lbl = new System.Windows.Forms.Label
-        {
-            Text = fieldLabels[i],
-            Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
-            AutoSize = true,
-            Location = new System.Drawing.Point(xLabel, yField)
-        };
-        this.Controls.Add(lbl);
-
-        var valueLabel = new System.Windows.Forms.Label
-        {
-            Text = fieldValues[i],
-            Font = new System.Drawing.Font("Arial", 10F),
-            AutoSize = true,
-            Location = new System.Drawing.Point(xValue, yField)
-        };
-        this.Controls.Add(valueLabel);
-
-        yField += 40;
+        InitializeComponent();
     }
 
-    // QR Code Box
-    var qrCodeBox = new System.Windows.Forms.PictureBox
+    private void InitializeComponent()
     {
-        BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-        Size = new System.Drawing.Size(120, 120),
-        Location = new System.Drawing.Point(650, 100)
-    };
-    this.Controls.Add(qrCodeBox);
+        this.SuspendLayout();
 
-    // Logo Box
-    var logoBox = new System.Windows.Forms.PictureBox
-    {
-        BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-        Size = new System.Drawing.Size(150, 50),
-        Location = new System.Drawing.Point(650, 250)
-    };
-    this.Controls.Add(logoBox);
+        // Form Properties
+        this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.ClientSize = new System.Drawing.Size(900, 600);
+        this.Text = "WIP Details";
 
-    // IEO (for GP) GroupBox
-    var ieoBox = new System.Windows.Forms.GroupBox
-    {
-        Text = "IEO (for GP)",
-        Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
-        Size = new System.Drawing.Size(400, 80),
-        Location = new System.Drawing.Point(50, 350)
-    };
-    var noOfSheetsLabel = new System.Windows.Forms.Label { Text = "No of sheet", Location = new System.Drawing.Point(10, 30), AutoSize = true };
-    var noOfSheetsBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(100, 25), Size = new System.Drawing.Size(100, 25) };
-    var productTypeLabel = new System.Windows.Forms.Label { Text = "Product Type", Location = new System.Drawing.Point(220, 30), AutoSize = true };
-    var productTypeBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(310, 25), Size = new System.Drawing.Size(80, 25) };
-    ieoBox.Controls.Add(noOfSheetsLabel);
-    ieoBox.Controls.Add(noOfSheetsBox);
-    ieoBox.Controls.Add(productTypeLabel);
-    ieoBox.Controls.Add(productTypeBox);
-    this.Controls.Add(ieoBox);
-
-    // Previous Stage Remarks GroupBox
-    var remarksBox = new System.Windows.Forms.GroupBox
-    {
-        Text = "Previous Stage Remarks",
-        Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
-        Size = new System.Drawing.Size(400, 100),
-        Location = new System.Drawing.Point(50, 450)
-    };
-    var processRouteLabel = new System.Windows.Forms.Label { Text = "Process Route", Location = new System.Drawing.Point(10, 30), AutoSize = true };
-    var processRouteBox = new System.Windows.Forms.TextBox { Location = new System.Drawing.Point(120, 25), Size = new System.Drawing.Size(250, 25) };
-    remarksBox.Controls.Add(processRouteLabel);
-    remarksBox.Controls.Add(processRouteBox);
-    this.Controls.Add(remarksBox);
-
-    // Additional Fields
-    var additionalFieldLabels = new[] { "Next Workcenter", "Bottom Coat Color" };
-    var additionalFieldValues = new[] { "C-COLOR COATED", "7035/TSL-629B" };
-    yField = 500;
-    for (int i = 0; i < additionalFieldLabels.Length; i++)
-    {
-        var additionalLabel = new System.Windows.Forms.Label
+        // Title Label
+        var titleLabel = new Label
         {
-            Text = additionalFieldLabels[i],
-            Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold),
+            Text = "WIP Details",
+            Font = new Font("Arial", 16F, FontStyle.Bold),
             AutoSize = true,
-            Location = new System.Drawing.Point(500, yField)
+            Location = new Point(370, 10)
         };
-        var additionalValue = new System.Windows.Forms.Label
+        this.Controls.Add(titleLabel);
+
+        // Company Details
+        var companyDetailsLabel = new Label
         {
-            Text = additionalFieldValues[i],
-            Font = new System.Drawing.Font("Arial", 10F),
+            Text = "TATA BLUESCOPE STEEL PRIVATE LIMITED\nPPGL C Y550PL HPL3 0.50BMT (0.58TPT) X610",
+            Font = new Font("Arial", 10F),
             AutoSize = true,
-            Location = new System.Drawing.Point(650, yField)
+            Location = new Point(270, 50)
         };
-        this.Controls.Add(additionalLabel);
-        this.Controls.Add(additionalValue);
-        yField += 50;
+        this.Controls.Add(companyDetailsLabel);
+
+        // Fields Labels and Values
+        string[] fieldLabels = {
+            "Mother Batch", "Customer Grade", "Thickness", "Weight", "Width", "Date/Shift"
+        };
+        string[] fieldValues = {
+            "K4C1072100", "15.160 MT", "0.500 MM", "15.160 MT", "1235 MM", "22-DEC-24/B"
+        };
+
+        int xLabel = 50, yField = 100, xValue = 200;
+        for (int i = 0; i < fieldLabels.Length; i++)
+        {
+            var lbl = new Label
+            {
+                Text = fieldLabels[i],
+                Font = new Font("Arial", 10F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(xLabel, yField)
+            };
+            this.Controls.Add(lbl);
+
+            var valueLabel = new Label
+            {
+                Text = fieldValues[i],
+                Font = new Font("Arial", 10F),
+                AutoSize = true,
+                Location = new Point(xValue, yField)
+            };
+            this.Controls.Add(valueLabel);
+
+            yField += 40;
+        }
+
+        // QR Code Box
+        var qrCodeBox = new PictureBox
+        {
+            BorderStyle = BorderStyle.FixedSingle,
+            Size = new Size(120, 120),
+            Location = new Point(650, 100)
+        };
+        this.Controls.Add(qrCodeBox);
+
+        // Generate QR Code
+        string qrCodeData = "K4C1072100 | 0.500 MM | 1235 MM | 22-DEC-24/B";
+        var qrCodeBitmap = GenerateQrCode(qrCodeData);
+        qrCodeBox.Image = qrCodeBitmap;
+
+        // Logo Box
+        var logoBox = new PictureBox
+        {
+            BorderStyle = BorderStyle.FixedSingle,
+            Size = new Size(150, 50),
+            Location = new Point(650, 250)
+        };
+        this.Controls.Add(logoBox);
+
+        // IEO (for GP) GroupBox
+        var ieoBox = new GroupBox
+        {
+            Text = "IEO (for GP)",
+            Font = new Font("Arial", 10F, FontStyle.Bold),
+            Size = new Size(400, 80),
+            Location = new Point(50, 350)
+        };
+        var noOfSheetsLabel = new Label { Text = "No of sheet", Location = new Point(10, 30), AutoSize = true };
+        var noOfSheetsBox = new TextBox { Location = new Point(100, 25), Size = new Size(100, 25) };
+        var productTypeLabel = new Label { Text = "Product Type", Location = new Point(220, 30), AutoSize = true };
+        var productTypeBox = new TextBox { Location = new Point(310, 25), Size = new Size(80, 25) };
+        ieoBox.Controls.Add(noOfSheetsLabel);
+        ieoBox.Controls.Add(noOfSheetsBox);
+        ieoBox.Controls.Add(productTypeLabel);
+        ieoBox.Controls.Add(productTypeBox);
+        this.Controls.Add(ieoBox);
+
+        // Previous Stage Remarks GroupBox
+        var remarksBox = new GroupBox
+        {
+            Text = "Previous Stage Remarks",
+            Font = new Font("Arial", 10F, FontStyle.Bold),
+            Size = new Size(400, 100),
+            Location = new Point(50, 450)
+        };
+        var processRouteLabel = new Label { Text = "Process Route", Location = new Point(10, 30), AutoSize = true };
+        var processRouteBox = new TextBox { Location = new Point(120, 25), Size = new Size(250, 25) };
+        remarksBox.Controls.Add(processRouteLabel);
+        remarksBox.Controls.Add(processRouteBox);
+        this.Controls.Add(remarksBox);
+
+        // Additional Fields
+        var additionalFieldLabels = new[] { "Next Workcenter", "Bottom Coat Color" };
+        var additionalFieldValues = new[] { "C-COLOR COATED", "7035/TSL-629B" };
+        yField = 500;
+        for (int i = 0; i < additionalFieldLabels.Length; i++)
+        {
+            var additionalLabel = new Label
+            {
+                Text = additionalFieldLabels[i],
+                Font = new Font("Arial", 10F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(500, yField)
+            };
+            var additionalValue = new Label
+            {
+                Text = additionalFieldValues[i],
+                Font = new Font("Arial", 10F),
+                AutoSize = true,
+                Location = new Point(650, yField)
+            };
+            this.Controls.Add(additionalLabel);
+            this.Controls.Add(additionalValue);
+            yField += 50;
+        }
+
+        this.ResumeLayout(false);
     }
 
-    this.ResumeLayout(false);
+    private Bitmap GenerateQrCode(string qrData)
+    {
+        var qrWriter = new BarcodeWriter
+        {
+            Format = BarcodeFormat.QR_CODE,
+            Options = new ZXing.Common.EncodingOptions
+            {
+                Width = 120,
+                Height = 120,
+                Margin = 1
+            }
+        };
+        return qrWriter.Write(qrData);
+    }
 }
