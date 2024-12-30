@@ -1,25 +1,20 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using ZXing; // Install ZXing.Net NuGet package
+Based on the error message shown in the image, the issue is that you're trying to modify the designer-generated code manually. In Windows Forms, the `InitializeComponent` method is typically managed by the Visual Studio Forms Designer. Here's how you can fix this:
 
-public class WipDetailsForm : Form
+1. First, create your form using the Forms Designer, then add your custom code in a separate method.
+
+Here's the modified approach:
+
+```csharp
+public partial class Form2 : Form
 {
-    public WipDetailsForm()
+    public Form2()
     {
-        InitializeComponent();
+        InitializeComponent(); // Let the designer handle basic initialization
+        SetupCustomControls(); // Call your custom setup method
     }
 
-    private void InitializeComponent()
+    private void SetupCustomControls()
     {
-        this.SuspendLayout();
-
-        // Form Properties
-        this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-        this.AutoScaleMode = AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(900, 600);
-        this.Text = "WIP Details";
-
         // Title Label
         var titleLabel = new Label
         {
@@ -80,11 +75,6 @@ public class WipDetailsForm : Form
             Location = new Point(650, 100)
         };
         this.Controls.Add(qrCodeBox);
-
-        // Generate QR Code
-        string qrCodeData = "K4C1072100 | 0.500 MM | 1235 MM | 22-DEC-24/B";
-        var qrCodeBitmap = GenerateQrCode(qrCodeData);
-        qrCodeBox.Image = qrCodeBitmap;
 
         // Logo Box
         var logoBox = new PictureBox
@@ -152,21 +142,22 @@ public class WipDetailsForm : Form
             yField += 50;
         }
 
-        this.ResumeLayout(false);
-    }
-
-    private Bitmap GenerateQrCode(string qrData)
-    {
-        var qrWriter = new BarcodeWriter
-        {
-            Format = BarcodeFormat.QR_CODE,
-            Options = new ZXing.Common.EncodingOptions
-            {
-                Width = 120,
-                Height = 120,
-                Margin = 1
-            }
-        };
-        return qrWriter.Write(qrData);
+        // Set form properties
+        this.ClientSize = new Size(900, 600);
+        this.Text = "WIP Details";
     }
 }
+```
+
+Key changes made:
+1. Moved the code from `InitializeComponent` to a new method called `SetupCustomControls`
+2. Simplified the namespace references (removed redundant System.Windows.Forms prefixes)
+3. Call `SetupCustomControls` after `InitializeComponent` in the constructor
+4. Let Visual Studio manage the designer-generated code in the separate designer file
+
+To use this:
+1. Create a new Windows Form in Visual Studio
+2. Copy this code into your form's code-behind file (Form2.cs)
+3. Let Visual Studio manage the InitializeComponent method in the designer file (Form2.Designer.cs)
+
+This approach separates the designer-generated code from your custom control creation, which should resolve the error you're seeing.
