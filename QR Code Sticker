@@ -1,6 +1,9 @@
+using QRCoder; // Ensure you have added the QRCoder NuGet package
+using System.Drawing;
+
 private void Form5_Load(object sender, EventArgs e)
 {
-    // Create an array to hold hardcoded values
+    // Array containing hardcoded values
     string[] data = new string[]
     {
         "TATA BLUESCOPE STEEL PRIVATE LIMITED", // Customer Name
@@ -21,24 +24,32 @@ private void Form5_Load(object sender, EventArgs e)
         "C-Color Coated" // Next Work Center
     };
 
-    // Assign array values to respective labels
-    lblCustomerName.Text = data[0];
-    lblProductDesc.Text = data[1];
-    lblBatchNumber.Text = data[2];
-    lblThickness.Text = data[3];
-    lblWidth.Text = data[4];
-    lblSurfaceFinish.Text = data[5];
+    // Concatenate array elements into a single string
+    string qrData = $"Customer Name: {data[0]}\n" +
+                    $"Product Desc: {data[1]}\n" +
+                    $"Batch Number: {data[2]}\n" +
+                    $"Thickness: {data[3]}\n" +
+                    $"Width: {data[4]}\n" +
+                    $"Surface Finish: {data[5]}\n" +
+                    $"Mother Batch: {data[6]}\n" +
+                    $"Customer Grade: {data[7]}\n" +
+                    $"Weight: {data[8]}\n" +
+                    $"Date/Shift: {data[9]}\n" +
+                    $"No. of Sheets: {data[10]}\n" +
+                    $"Product Type: {data[11]}\n" +
+                    $"Previous State Remarks: {data[12]}\n" +
+                    $"Process Route: {data[13]}\n" +
+                    $"Current Work Center: {data[14]}\n" +
+                    $"Next Work Center: {data[15]}";
 
-    lblMotherBatch.Text = data[6];
-    lblCustomerGrade.Text = data[7];
-    lblWeight.Text = data[8];
-    lblDateShift.Text = data[9];
-
-    lblNoOfSheets.Text = data[10];
-    lblProductType.Text = data[11];
-
-    lblPreviousStateRemarks.Text = data[12];
-    lblProcessRoute.Text = data[13];
-    lblCurrentWorkCenter.Text = data[14];
-    lblNextWorkCenter.Text = data[15];
+    // Generate the QR code
+    using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+    {
+        QRCodeGenerator.QRCode qrCodeData = qrGenerator.CreateQrCode(qrData, QRCodeGenerator.ECCLevel.Q);
+        using (QRCode qrCode = new QRCode(qrCodeData))
+        {
+            Bitmap qrCodeImage = qrCode.GetGraphic(20); // Generate QR code image with pixel size 20
+            picQRCode.Image = qrCodeImage; // Assign to PictureBox
+        }
+    }
 }
