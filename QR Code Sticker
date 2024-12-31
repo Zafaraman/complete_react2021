@@ -1,55 +1,52 @@
-using QRCoder; // Ensure you have added the QRCoder NuGet package
+using System;
 using System.Drawing;
+using System.Drawing.Printing;
+using System.Windows.Forms;
 
-private void Form5_Load(object sender, EventArgs e)
+public partial class Form1 : Form
 {
-    // Array containing hardcoded values
-    string[] data = new string[]
+    public Form1()
     {
-        "TATA BLUESCOPE STEEL PRIVATE LIMITED", // Customer Name
-        "PPGL C Y550PL HPL3 0.50BMT(0.58TPT)X610", // Product Description
-        "K4C1072100", // Batch Number
-        "0.500 MM", // Thickness
-        "1235 MM", // Width
-        "Surface Finish", // Surface Finish
-        "Mother Batch", // Mother Batch
-        "Customer Grade", // Customer Grade
-        "15.160 MT", // Weight
-        "22-DEC-24/B", // Date/Shift
-        "No. of Sheets", // No. of Sheet
-        "Product Type", // Product Type
-        "4ZZ14689", // Previous State Remarks
-        "CCL CRS (P-M2-TR-QA-C-QA-R-QA-PACK)", // Process Route
-        "09-OA", // Current Work Center
-        "C-Color Coated" // Next Work Center
-    };
+        InitializeComponent();
+    }
 
-    // Concatenate array elements into a single string
-    string qrData = $"Customer Name: {data[0]}\n" +
-                    $"Product Desc: {data[1]}\n" +
-                    $"Batch Number: {data[2]}\n" +
-                    $"Thickness: {data[3]}\n" +
-                    $"Width: {data[4]}\n" +
-                    $"Surface Finish: {data[5]}\n" +
-                    $"Mother Batch: {data[6]}\n" +
-                    $"Customer Grade: {data[7]}\n" +
-                    $"Weight: {data[8]}\n" +
-                    $"Date/Shift: {data[9]}\n" +
-                    $"No. of Sheets: {data[10]}\n" +
-                    $"Product Type: {data[11]}\n" +
-                    $"Previous State Remarks: {data[12]}\n" +
-                    $"Process Route: {data[13]}\n" +
-                    $"Current Work Center: {data[14]}\n" +
-                    $"Next Work Center: {data[15]}";
-
-    // Generate the QR code
-    using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+    private void btnPrint_Click(object sender, EventArgs e)
     {
-        QRCodeGenerator.QRCode qrCodeData = qrGenerator.CreateQrCode(qrData, QRCodeGenerator.ECCLevel.Q);
-        using (QRCode qrCode = new QRCode(qrCodeData))
+        PrintDocument printDoc = new PrintDocument();
+        printDoc.PrintPage += new PrintPageEventHandler(PrintDoc_PrintPage);
+
+        PrintDialog printDialog = new PrintDialog
         {
-            Bitmap qrCodeImage = qrCode.GetGraphic(20); // Generate QR code image with pixel size 20
-            picQRCode.Image = qrCodeImage; // Assign to PictureBox
+            Document = printDoc
+        };
+
+        if (printDialog.ShowDialog() == DialogResult.OK)
+        {
+            printDoc.Print();
         }
+    }
+
+    private void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
+    {
+        // Get the dimensions of the printable area
+        float pageWidth = e.PageBounds.Width;
+        float pageHeight = e.PageBounds.Height;
+
+        // Print page dimensions
+        string dimensionsText = $"Page Dimensions: {pageWidth} x {pageHeight}";
+        Font font = new Font("Arial", 12);
+        float textX = 10; // X position of the text
+        float textY = 10; // Y position of the text
+
+        e.Graphics.DrawString(dimensionsText, font, Brushes.Black, textX, textY);
+
+        // Capture the form as an image
+        Bitmap bmp = new Bitmap(this.Width, this.Height);
+        this.DrawToBitmap(bmp, new Rectangle(0, 0, this.Width, this.Height));
+
+        // Print the captured form image
+        float imageX = 10;
+        float imageY = textY + font.GetHeight() + 10; // Below the dimensions text
+        e.Graphics.DrawImage(bmp, imageX, imageY);
     }
 }
