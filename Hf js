@@ -1,0 +1,33 @@
+// Function to update error indicators for HF and Mill
+function updateErrorIndicators() {
+    // Get all HF and Mill error elements
+    const hfErrorElements = document.querySelectorAll('.hf-error');
+    const millErrorElements = document.querySelectorAll('.mill-error');
+
+    // Update HF errors
+    hfErrorElements.forEach(el => {
+        const value = parseInt(el.getAttribute('data-value'));
+        if (value === 0) {
+            el.classList.remove('green');
+            el.classList.add('red');
+        } else {
+            el.classList.remove('red');
+            el.classList.add('green');
+        }
+    });
+
+    // Update Mill errors
+    millErrorElements.forEach(el => {
+        const value = parseInt(el.getAttribute('data-value'));
+        if (value === 0) {
+            el.classList.remove('green');
+            el.classList.add('red');
+        } else {
+            el.classList.remove('red');
+            el.classList.add('green');
+        }
+    });
+}
+
+// Call this function after the page loads or when data is updated
+updateErrorIndicators();
