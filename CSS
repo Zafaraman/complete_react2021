@@ -1,25 +1,17 @@
-.hf-error {
-    display: inline-block;
-    width: 20px; /* Reduced size */
-    height: 20px; /* Reduced size */
+.hf-error, .mill-error {
+    padding: 5px 10px;
+    border-radius: 5px;
     text-align: center;
-    line-height: 20px; /* Match height for proper text alignment */
     font-weight: bold;
-    border-radius: 50%; /* Circular shape for radio button */
-    margin: 5px;
-    color: white;
-    cursor: pointer;
-    font-size: 12px; /* Adjust font size */
-    border: 2px solid transparent; /* Optional: For cleaner edges */
+    margin-top: 5px;
 }
 
-/* Default color */
-.hf-error.green {
+.hf-error.green, .mill-error.green {
     background-color: green;
-    border-color: green; /* Optional: Match border color */
+    color: white;
 }
 
-.hf-error.red {
+.hf-error.red, .mill-error.red {
     background-color: red;
-    border-color: red; /* Optional: Match border color */
+    color: white;
 }
