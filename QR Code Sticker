@@ -1,229 +1,44 @@
-namespace QRCodeGeneratorApp
+private void Form5_Load(object sender, EventArgs e)
 {
-    partial class MainForm
+    // Create an array to hold hardcoded values
+    string[] data = new string[]
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        "TATA BLUESCOPE STEEL PRIVATE LIMITED", // Customer Name
+        "PPGL C Y550PL HPL3 0.50BMT(0.58TPT)X610", // Product Description
+        "K4C1072100", // Batch Number
+        "0.500 MM", // Thickness
+        "1235 MM", // Width
+        "Surface Finish", // Surface Finish
+        "Mother Batch", // Mother Batch
+        "Customer Grade", // Customer Grade
+        "15.160 MT", // Weight
+        "22-DEC-24/B", // Date/Shift
+        "No. of Sheets", // No. of Sheet
+        "Product Type", // Product Type
+        "4ZZ14689", // Previous State Remarks
+        "CCL CRS (P-M2-TR-QA-C-QA-R-QA-PACK)", // Process Route
+        "09-OA", // Current Work Center
+        "C-Color Coated" // Next Work Center
+    };
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+    // Assign array values to respective labels
+    lblCustomerName.Text = data[0];
+    lblProductDesc.Text = data[1];
+    lblBatchNumber.Text = data[2];
+    lblThickness.Text = data[3];
+    lblWidth.Text = data[4];
+    lblSurfaceFinish.Text = data[5];
 
-        #region Windows Form Designer generated code
+    lblMotherBatch.Text = data[6];
+    lblCustomerGrade.Text = data[7];
+    lblWeight.Text = data[8];
+    lblDateShift.Text = data[9];
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.lblCustomerName = new System.Windows.Forms.Label();
-            this.txtCustomerName = new System.Windows.Forms.TextBox();
-            this.lblProductDesc = new System.Windows.Forms.Label();
-            this.txtProductDesc = new System.Windows.Forms.TextBox();
-            this.lblBatchNumber = new System.Windows.Forms.Label();
-            this.txtBatchNumber = new System.Windows.Forms.TextBox();
-            this.lblThickness = new System.Windows.Forms.Label();
-            this.txtThickness = new System.Windows.Forms.TextBox();
-            this.lblWidth = new System.Windows.Forms.Label();
-            this.txtWidth = new System.Windows.Forms.TextBox();
-            this.lblSurfaceFinish = new System.Windows.Forms.Label();
-            this.txtSurfaceFinish = new System.Windows.Forms.TextBox();
-            this.lblDateShift = new System.Windows.Forms.Label();
-            this.txtDateShift = new System.Windows.Forms.TextBox();
-            this.btnGenerateQR = new System.Windows.Forms.Button();
-            this.picQRCode = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picQRCode)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // lblCustomerName
-            // 
-            this.lblCustomerName.AutoSize = true;
-            this.lblCustomerName.Location = new System.Drawing.Point(12, 15);
-            this.lblCustomerName.Name = "lblCustomerName";
-            this.lblCustomerName.Size = new System.Drawing.Size(96, 13);
-            this.lblCustomerName.TabIndex = 0;
-            this.lblCustomerName.Text = "Customer Name:";
-            // 
-            // txtCustomerName
-            // 
-            this.txtCustomerName.Location = new System.Drawing.Point(114, 12);
-            this.txtCustomerName.Name = "txtCustomerName";
-            this.txtCustomerName.Size = new System.Drawing.Size(200, 20);
-            this.txtCustomerName.TabIndex = 1;
-            // 
-            // lblProductDesc
-            // 
-            this.lblProductDesc.AutoSize = true;
-            this.lblProductDesc.Location = new System.Drawing.Point(12, 45);
-            this.lblProductDesc.Name = "lblProductDesc";
-            this.lblProductDesc.Size = new System.Drawing.Size(96, 13);
-            this.lblProductDesc.TabIndex = 2;
-            this.lblProductDesc.Text = "Product Desc:";
-            // 
-            // txtProductDesc
-            // 
-            this.txtProductDesc.Location = new System.Drawing.Point(114, 42);
-            this.txtProductDesc.Name = "txtProductDesc";
-            this.txtProductDesc.Size = new System.Drawing.Size(200, 20);
-            this.txtProductDesc.TabIndex = 3;
-            // 
-            // lblBatchNumber
-            // 
-            this.lblBatchNumber.AutoSize = true;
-            this.lblBatchNumber.Location = new System.Drawing.Point(12, 75);
-            this.lblBatchNumber.Name = "lblBatchNumber";
-            this.lblBatchNumber.Size = new System.Drawing.Size(87, 13);
-            this.lblBatchNumber.TabIndex = 4;
-            this.lblBatchNumber.Text = "Batch Number:";
-            // 
-            // txtBatchNumber
-            // 
-            this.txtBatchNumber.Location = new System.Drawing.Point(114, 72);
-            this.txtBatchNumber.Name = "txtBatchNumber";
-            this.txtBatchNumber.Size = new System.Drawing.Size(200, 20);
-            this.txtBatchNumber.TabIndex = 5;
-            // 
-            // lblThickness
-            // 
-            this.lblThickness.AutoSize = true;
-            this.lblThickness.Location = new System.Drawing.Point(12, 105);
-            this.lblThickness.Name = "lblThickness";
-            this.lblThickness.Size = new System.Drawing.Size(66, 13);
-            this.lblThickness.TabIndex = 6;
-            this.lblThickness.Text = "Thickness:";
-            // 
-            // txtThickness
-            // 
-            this.txtThickness.Location = new System.Drawing.Point(114, 102);
-            this.txtThickness.Name = "txtThickness";
-            this.txtThickness.Size = new System.Drawing.Size(200, 20);
-            this.txtThickness.TabIndex = 7;
-            // 
-            // lblWidth
-            // 
-            this.lblWidth.AutoSize = true;
-            this.lblWidth.Location = new System.Drawing.Point(12, 135);
-            this.lblWidth.Name = "lblWidth";
-            this.lblWidth.Size = new System.Drawing.Size(42, 13);
-            this.lblWidth.TabIndex = 8;
-            this.lblWidth.Text = "Width:";
-            // 
-            // txtWidth
-            // 
-            this.txtWidth.Location = new System.Drawing.Point(114, 132);
-            this.txtWidth.Name = "txtWidth";
-            this.txtWidth.Size = new System.Drawing.Size(200, 20);
-            this.txtWidth.TabIndex = 9;
-            // 
-            // lblSurfaceFinish
-            // 
-            this.lblSurfaceFinish.AutoSize = true;
-            this.lblSurfaceFinish.Location = new System.Drawing.Point(12, 165);
-            this.lblSurfaceFinish.Name = "lblSurfaceFinish";
-            this.lblSurfaceFinish.Size = new System.Drawing.Size(92, 13);
-            this.lblSurfaceFinish.TabIndex = 10;
-            this.lblSurfaceFinish.Text = "Surface Finish:";
-            // 
-            // txtSurfaceFinish
-            // 
-            this.txtSurfaceFinish.Location = new System.Drawing.Point(114, 162);
-            this.txtSurfaceFinish.Name = "txtSurfaceFinish";
-            this.txtSurfaceFinish.Size = new System.Drawing.Size(200, 20);
-            this.txtSurfaceFinish.TabIndex = 11;
-            // 
-            // lblDateShift
-            // 
-            this.lblDateShift.AutoSize = true;
-            this.lblDateShift.Location = new System.Drawing.Point(12, 195);
-            this.lblDateShift.Name = "lblDateShift";
-            this.lblDateShift.Size = new System.Drawing.Size(70, 13);
-            this.lblDateShift.TabIndex = 12;
-            this.lblDateShift.Text = "Date/Shift:";
-            // 
-            // txtDateShift
-            // 
-            this.txtDateShift.Location = new System.Drawing.Point(114, 192);
-            this.txtDateShift.Name = "txtDateShift";
-            this.txtDateShift.Size = new System.Drawing.Size(200, 20);
-            this.txtDateShift.TabIndex = 13;
-            // 
-            // btnGenerateQR
-            // 
-            this.btnGenerateQR.Location = new System.Drawing.Point(114, 225);
-            this.btnGenerateQR.Name = "btnGenerateQR";
-            this.btnGenerateQR.Size = new System.Drawing.Size(200, 23);
-            this.btnGenerateQR.TabIndex = 14;
-            this.btnGenerateQR.Text = "Generate QR Code";
-            this.btnGenerateQR.UseVisualStyleBackColor = true;
-            this.btnGenerateQR.Click += new System.EventHandler(this.btnGenerateQR_Click);
-            // 
-            // picQRCode
-            // 
-            this.picQRCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picQRCode.Location = new System.Drawing.Point(350, 12);
-            this.picQRCode.Name = "picQRCode";
-            this.picQRCode.Size = new System.Drawing.Size(200, 200);
-            this.picQRCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picQRCode.TabIndex = 15;
-            this.picQRCode.TabStop = false;
-            // 
-            // MainForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 261);
-            this.Controls.Add(this.picQRCode);
-            this.Controls.Add(this.btnGenerateQR);
-            this.Controls.Add(this.txtDateShift);
-            this.Controls.Add(this.lblDateShift);
-            this.Controls.Add(this.txtSurfaceFinish);
-            this.Controls.Add(this.lblSurfaceFinish);
-            this.Controls.Add(this.txtWidth);
-            this.Controls.Add(this.lblWidth);
-            this.Controls.Add(this.txtThickness);
-            this.Controls.Add(this.lblThickness);
-            this.Controls.Add(this.txtBatchNumber);
-            this.Controls.Add(this.lblBatchNumber);
-            this.Controls.Add(this.txtProductDesc);
-            this.Controls.Add(this.lblProductDesc);
-            this.Controls.Add(this.txtCustomerName);
-            this.Controls.Add(this.lblCustomerName);
-            this.Name = "MainForm";
-            this.Text = "QR Code Generator";
-            ((System.ComponentModel.ISupportInitialize)(this.picQRCode)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-        }
+    lblNoOfSheets.Text = data[10];
+    lblProductType.Text = data[11];
 
-        #endregion
-
-        private System.Windows.Forms.Label lblCustomerName;
-        private System.Windows.Forms.TextBox txtCustomerName;
-        private System.Windows.Forms.Label lblProductDesc;
-        private System.Windows.Forms.TextBox txtProductDesc;
-        private System.Windows.Forms.Label lblBatchNumber;
-        private System.Windows.Forms.TextBox txtBatchNumber;
-        private System.Windows.Forms.Label lblThickness;
-        private System.Windows.Forms.TextBox txtThickness;
-        private System.Windows.Forms.Label lblWidth;
-        private System.Windows.Forms.TextBox txtWidth;
-        private System.Windows.Forms.Label lblSurfaceFinish;
-        private System.Windows.Forms.TextBox txtSurfaceFinish;
-        private System.Windows.Forms.Label lblDateShift;
-        private System.Windows.Forms.TextBox txtDateShift;
-        private System.Windows.Forms.Button btnGenerateQR;
-        private System.Windows.Forms.PictureBox picQRCode;
-    }
+    lblPreviousStateRemarks.Text = data[12];
+    lblProcessRoute.Text = data[13];
+    lblCurrentWorkCenter.Text = data[14];
+    lblNextWorkCenter.Text = data[15];
 }
