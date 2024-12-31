@@ -10,11 +10,13 @@ public partial class Form1 : Form
         InitializeComponent();
     }
 
-    private void btnPrint_Click(object sender, EventArgs e)
+    private void btnPrintPanel_Click(object sender, EventArgs e)
     {
+        // Create a PrintDocument object
         PrintDocument printDoc = new PrintDocument();
         printDoc.PrintPage += new PrintPageEventHandler(PrintDoc_PrintPage);
 
+        // Show the PrintDialog
         PrintDialog printDialog = new PrintDialog
         {
             Document = printDoc
@@ -28,25 +30,19 @@ public partial class Form1 : Form
 
     private void PrintDoc_PrintPage(object sender, PrintPageEventArgs e)
     {
-        // Get the dimensions of the printable area
-        float pageWidth = e.PageBounds.Width;
-        float pageHeight = e.PageBounds.Height;
+        // Capture the panel content as a bitmap
+        Bitmap bmp = new Bitmap(panel1.Width, panel1.Height);
+        panel1.DrawToBitmap(bmp, new Rectangle(0, 0, panel1.Width, panel1.Height));
 
-        // Print page dimensions
-        string dimensionsText = $"Page Dimensions: {pageWidth} x {pageHeight}";
-        Font font = new Font("Arial", 12);
-        float textX = 10; // X position of the text
-        float textY = 10; // Y position of the text
+        // Adjust the image size for the printable area
+        float scale = Math.Min(
+            (float)e.MarginBounds.Width / bmp.Width,
+            (float)e.MarginBounds.Height / bmp.Height
+        );
+        int scaledWidth = (int)(bmp.Width * scale);
+        int scaledHeight = (int)(bmp.Height * scale);
 
-        e.Graphics.DrawString(dimensionsText, font, Brushes.Black, textX, textY);
-
-        // Capture the form as an image
-        Bitmap bmp = new Bitmap(this.Width, this.Height);
-        this.DrawToBitmap(bmp, new Rectangle(0, 0, this.Width, this.Height));
-
-        // Print the captured form image
-        float imageX = 10;
-        float imageY = textY + font.GetHeight() + 10; // Below the dimensions text
-        e.Graphics.DrawImage(bmp, imageX, imageY);
+        // Draw the image on the print page
+        e.Graphics.DrawImage(bmp, e.MarginBounds.Left, e.MarginBounds.Top, scaledWidth, scaledHeight);
     }
 }
